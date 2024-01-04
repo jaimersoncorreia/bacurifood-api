@@ -1,9 +1,6 @@
 package tech.bacuri.bacurifood.domain.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,9 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Cozinha {
     @EqualsAndHashCode.Include
