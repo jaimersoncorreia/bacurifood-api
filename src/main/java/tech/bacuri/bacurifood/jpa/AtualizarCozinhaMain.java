@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import tech.bacuri.bacurifood.BacurifoodApiApplication;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 
-public class IncluirCozinhaMain {
+public class AtualizarCozinhaMain {
     public static void main(String[] args) {
         ApplicationContext context = new SpringApplicationBuilder(BacurifoodApiApplication.class)
                 .web(WebApplicationType.NONE)
@@ -15,14 +15,10 @@ public class IncluirCozinhaMain {
 
         CadastroCozinha teste = context.getBean(CadastroCozinha.class);
 
-        Cozinha japonesa = teste.salvar(Cozinha.builder().nome("Japonesa").build());
-        Cozinha alema = teste.salvar(Cozinha.builder().nome("Alemã").build());
-        Cozinha francesa = teste.salvar(Cozinha.builder().nome("Francesa").build());
+        Cozinha brasileira = Cozinha.builder().id(1L).nome("Brasileira").build();
+        teste.salvar(brasileira);
 
-        System.out.println("japonesa = " + japonesa);
-        System.out.println("alema = " + alema);
-        System.out.println("francesa = " + francesa);
 
-        teste.listar().forEach(System.out::println);
+        System.out.println("teste.obter(1L) = " + teste.obter(1L));
     }
 }

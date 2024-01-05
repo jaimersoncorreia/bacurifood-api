@@ -16,9 +16,9 @@ public class ConsultaCozinhaMain {
         CadastroCozinha cadastroCozinha = context.getBean(CadastroCozinha.class);
 //        CadastroCozinha teste = context.getBean(CadastroCozinha.class);
 
-        cadastroCozinha.adicionar(Cozinha.builder().nome("Japonesa").build());
-        cadastroCozinha.adicionar(Cozinha.builder().nome("Alemã").build());
-        cadastroCozinha.adicionar(Cozinha.builder().nome("Francesa").build());
+        cadastroCozinha.salvar(Cozinha.builder().nome("Japonesa").build());
+        cadastroCozinha.salvar(Cozinha.builder().nome("Alemã").build());
+        cadastroCozinha.salvar(Cozinha.builder().nome("Francesa").build());
 
         cadastroCozinha.listar().forEach(cozinha -> System.out.println("cozinha = " + cozinha));
     }
