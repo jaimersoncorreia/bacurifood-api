@@ -4,6 +4,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import tech.bacuri.bacurifood.BacurifoodApiApplication;
+import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
 
@@ -18,7 +19,7 @@ public class RemoverRestauranteMain {
 
         RestauranteRepository repository = context.getBean(RestauranteRepository.class);
 
-        repository.salvar(Restaurante.builder().nome("Restaurante da Joana").taxaFrete(new BigDecimal("50.00")).build());
+        repository.salvar(Restaurante.builder().nome("Restaurante da Joana").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
         repository.remover(Restaurante.builder().id(4L).build());
 
         assert repository.obter(4L) != null;
