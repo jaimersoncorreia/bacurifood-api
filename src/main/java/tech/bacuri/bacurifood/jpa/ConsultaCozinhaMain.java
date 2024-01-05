@@ -15,7 +15,6 @@ public class ConsultaCozinhaMain {
 
 
         CozinhaRepository cadastroCozinha = context.getBean(CozinhaRepository.class);
-//        CadastroCozinha teste = context.getBean(CadastroCozinha.class);
 
         cadastroCozinha.salvar(Cozinha.builder().nome("Japonesa").build());
         cadastroCozinha.salvar(Cozinha.builder().nome("Alemã").build());
