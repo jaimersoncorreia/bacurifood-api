@@ -1,35 +1,37 @@
-package tech.bacuri.bacurifood.jpa;
+package tech.bacuri.bacurifood.infrastructure.repository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
+import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Component
-public class CadastroCozinha {
-
+public class CozinhaRepositoryImpl implements CozinhaRepository {
     @PersistenceContext
     private EntityManager manager;
 
-    public List<Cozinha> listar() {
-        TypedQuery<Cozinha> query = manager.createQuery("from Cozinha", Cozinha.class);
-        return query.getResultList();
+    @Override
+    public List<Cozinha> todas() {
+        return manager.createQuery("from Cozinha", Cozinha.class).getResultList();
     }
 
-    @Transactional
-    public Cozinha salvar(Cozinha cozinha) {
-        return manager.merge(cozinha);
-    }
-
+    @Override
     public Cozinha obter(Long id) {
         return manager.find(Cozinha.class, id);
     }
 
     @Transactional
+    @Override
+    public Cozinha salvar(Cozinha cozinha) {
+        return manager.merge(cozinha);
+    }
+
+    @Transactional
+    @Override
     public void remover(Cozinha cozinha) {
         manager.remove(obter(cozinha.getId()));
     }

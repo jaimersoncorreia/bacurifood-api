@@ -5,6 +5,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import tech.bacuri.bacurifood.BacurifoodApiApplication;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
+import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 
 public class IncluirCozinhaMain {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class IncluirCozinhaMain {
                 .run(args);
 
 
-        CadastroCozinha teste = context.getBean(CadastroCozinha.class);
+        CozinhaRepository teste = context.getBean(CozinhaRepository.class);
 
         Cozinha japonesa = teste.salvar(Cozinha.builder().nome("Japonesa").build());
         Cozinha alema = teste.salvar(Cozinha.builder().nome("Alemã").build());
@@ -23,6 +24,6 @@ public class IncluirCozinhaMain {
         System.out.println("alema = " + alema);
         System.out.println("francesa = " + francesa);
 
-        teste.listar().forEach(System.out::println);
+        teste.todas().forEach(System.out::println);
     }
 }

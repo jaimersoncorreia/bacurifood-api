@@ -5,6 +5,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import tech.bacuri.bacurifood.BacurifoodApiApplication;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
+import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 
 public class RemoverCozinhaMain {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class RemoverCozinhaMain {
                 .run(args);
 
 
-        CadastroCozinha teste = context.getBean(CadastroCozinha.class);
+        CozinhaRepository teste = context.getBean(CozinhaRepository.class);
 
         teste.remover(Cozinha.builder().id(1L).build());
 
