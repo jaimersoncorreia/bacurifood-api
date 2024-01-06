@@ -11,6 +11,7 @@ import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
 import java.math.BigDecimal;
 
 public class IncluirRestauranteMain {
+
     public static void main(String[] args) {
         ApplicationContext context = new SpringApplicationBuilder(BacurifoodApiApplication.class)
                 .web(WebApplicationType.NONE)
