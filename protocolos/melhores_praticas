@@ -1,0 +1,5 @@
+GET     /produtos   - Lista os produtos
+POST    /produtos   - Cria um produto
+GET     /produtos/1 - Busca um produto
+PUT     /produtos/1 - Atualiza um produto
+DELETE  /produtos/1 - Deleta um produto
