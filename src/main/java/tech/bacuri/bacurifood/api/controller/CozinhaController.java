@@ -18,13 +18,13 @@ public class CozinhaController {
     private final CozinhaRepository cozinhaRepository;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Cozinha> listar() {
-        return cozinhaRepository.listar();
+    public ResponseEntity<List<Cozinha>> listar() {
+        return ResponseEntity.ok(cozinhaRepository.listar());
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_XML_VALUE})
-    public CozinhasXmlWrapper listarXml() {
-        return new CozinhasXmlWrapper(cozinhaRepository.listar());
+    public ResponseEntity<CozinhasXmlWrapper> listarXml() {
+        return ResponseEntity.ok(new CozinhasXmlWrapper(cozinhaRepository.listar()));
     }
 
     @GetMapping("/{cozinhaId}")
