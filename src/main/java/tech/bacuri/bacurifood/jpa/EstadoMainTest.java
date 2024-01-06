@@ -25,7 +25,7 @@ public class EstadoMainTest {
         assert Objects.equals(estadoRepository.obter(1L).getNome(), "Acre") : "Não é Acre";
         assert Objects.equals(estadoRepository.obter(2L).getNome(), "Roraima") : "Não é Roraima";
 
-        assert estadoRepository.todas().size() == 2 : "Era para tem vindo 2";
+        assert estadoRepository.listar().size() == 2 : "Era para tem vindo 2";
 
         estadoRepository.remover(estadoRepository.obter(1L));
 
