@@ -3,10 +3,7 @@ package tech.bacuri.bacurifood.api.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.api.model.CozinhasXmlWrapper;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
@@ -32,10 +29,10 @@ public class CozinhaController {
 
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> obter(@PathVariable Long cozinhaId) {
-        Cozinha obter = cozinhaRepository.obter(cozinhaId);
-        if (obter == null)
+        Cozinha cozinha = cozinhaRepository.obter(cozinhaId);
+        if (cozinha == null)
             return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok(obter);
+        return ResponseEntity.ok(cozinha);
     }
 }
