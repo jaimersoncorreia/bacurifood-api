@@ -20,6 +20,6 @@ public class ConsultaCozinhaMain {
         cadastroCozinha.salvar(Cozinha.builder().nome("Alemã").build());
         cadastroCozinha.salvar(Cozinha.builder().nome("Francesa").build());
 
-        cadastroCozinha.todas().forEach(cozinha -> System.out.println("cozinha = " + cozinha));
+        cadastroCozinha.listar().forEach(cozinha -> System.out.println("cozinha = " + cozinha));
     }
 }

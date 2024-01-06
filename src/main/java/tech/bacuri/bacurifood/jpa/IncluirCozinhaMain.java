@@ -24,6 +24,6 @@ public class IncluirCozinhaMain {
         System.out.println("alema = " + alema);
         System.out.println("francesa = " + francesa);
 
-        teste.todas().forEach(System.out::println);
+        teste.listar().forEach(System.out::println);
     }
 }
