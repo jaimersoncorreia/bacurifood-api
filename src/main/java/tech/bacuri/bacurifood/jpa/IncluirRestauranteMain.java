@@ -28,6 +28,6 @@ public class IncluirRestauranteMain {
         System.out.println("maminha = " + maminha);
         System.out.println("file = " + file);
 
-        repository.todas().forEach(System.out::println);
+        repository.listar().forEach(System.out::println);
     }
 }
