@@ -1,11 +1,9 @@
 package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
@@ -30,6 +28,15 @@ public class RestauranteController {
             return ResponseEntity.ok(cadastroRestauranteService.obter(restauranteId));
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
+        try {
+            return new ResponseEntity<>(cadastroRestauranteService.salvar(restaurante), HttpStatus.CREATED);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
