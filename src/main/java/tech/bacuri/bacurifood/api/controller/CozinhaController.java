@@ -1,6 +1,7 @@
 package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,16 @@ public class CozinhaController {
     @PostMapping
     public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
         return new ResponseEntity<>(cozinhaRepository.salvar(cozinha), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{cozinhaId}")
+    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+        Cozinha cozinhaObtida = cozinhaRepository.obter(cozinhaId);
+        if (cozinhaObtida == null)
+            return ResponseEntity.notFound().build();
+
+        BeanUtils.copyProperties(cozinha, cozinhaObtida, "id");
+
+        return new ResponseEntity<>(cozinhaRepository.salvar(cozinhaObtida), HttpStatus.OK);
     }
 }
