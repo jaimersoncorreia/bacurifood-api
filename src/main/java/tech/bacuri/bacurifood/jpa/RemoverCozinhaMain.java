@@ -16,7 +16,7 @@ public class RemoverCozinhaMain {
 
         CozinhaRepository teste = context.getBean(CozinhaRepository.class);
 
-        teste.remover(Cozinha.builder().id(1L).build());
+        teste.remover(Cozinha.builder().id(1L).build().getId());
 
         System.out.println("teste.obter(1L) = " + teste.obter(1L));
     }
