@@ -2,6 +2,7 @@ package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,20 @@ public class CozinhaController {
         BeanUtils.copyProperties(cozinha, cozinhaObtida, "id");
 
         return new ResponseEntity<>(cozinhaRepository.salvar(cozinhaObtida), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{cozinhaId}")
+    public ResponseEntity<Cozinha> deletar(@PathVariable Long cozinhaId) {
+        Cozinha cozinhaObtida = cozinhaRepository.obter(cozinhaId);
+        if (cozinhaObtida == null)
+            return ResponseEntity.notFound().build();
+
+        try {
+            cozinhaRepository.remover(cozinhaObtida);
+        }catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }
