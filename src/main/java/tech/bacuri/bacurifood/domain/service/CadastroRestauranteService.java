@@ -23,7 +23,7 @@ public class CadastroRestauranteService {
     public Restaurante obter(Long restauranteId) {
         Restaurante restaurante = restauranteRepository.obter(restauranteId);
         if (restaurante == null) {
-            String msg = String.format("Não existe cadastro de restaurante com p código %d", restauranteId);
+            String msg = String.format("Não existe cadastro de restaurante com o código %d", restauranteId);
             throw new EntidadeNaoEncontradaException(msg);
         }
         return restaurante;
@@ -39,5 +39,9 @@ public class CadastroRestauranteService {
         }
 
         return restauranteRepository.salvar(restaurante);
+    }
+
+    public Restaurante atualizar(Restaurante restaurante) {
+        return salvar(restaurante);
     }
 }
