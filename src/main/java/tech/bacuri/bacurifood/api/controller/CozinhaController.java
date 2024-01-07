@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.api.model.CozinhasXmlWrapper;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
+import tech.bacuri.bacurifood.domain.service.CadastroCozinhaService;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class CozinhaController {
 
     private final CozinhaRepository cozinhaRepository;
+    private final CadastroCozinhaService cadastroCozinhaService;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<Cozinha>> listar() {
@@ -41,7 +43,7 @@ public class CozinhaController {
 
     @PostMapping
     public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
-        return new ResponseEntity<>(cozinhaRepository.salvar(cozinha), HttpStatus.CREATED);
+        return new ResponseEntity<>(cadastroCozinhaService.salvar(cozinha), HttpStatus.CREATED);
     }
 
     @PutMapping("/{cozinhaId}")
