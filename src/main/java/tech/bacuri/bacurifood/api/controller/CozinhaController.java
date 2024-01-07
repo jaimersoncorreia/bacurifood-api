@@ -1,6 +1,7 @@
 package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,10 @@ public class CozinhaController {
             return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(cozinha);
+    }
+
+    @PostMapping
+    public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
+        return new ResponseEntity<>(cozinhaRepository.salvar(cozinha), HttpStatus.CREATED);
     }
 }
