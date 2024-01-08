@@ -26,7 +26,7 @@ public class CidadeMainTest {
         assert Objects.equals(teste.obter(1L).getNome(), "Manaus") : "Não é Manaus";
         assert Objects.equals(teste.obter(2L).getNome(), "Careiro da Várzea") : "Não é Careiro da Várzea";
 
-        assert teste.todas().size() == 2 : "Era para tem vindo 2";
+        assert teste.listar().size() == 2 : "Era para tem vindo 2";
 
         teste.remover(teste.obter(1L));
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CidadeRepository {
 
-    List<Cidade> todas();
+    List<Cidade> listar();
 
     Cidade obter(Long id);
 
