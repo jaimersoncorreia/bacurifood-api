@@ -9,6 +9,8 @@ import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.service.CadastroCidadeService;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/cidades")
@@ -45,5 +47,24 @@ public class CidadeController {
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PatchMapping("/{cidadeId}")
+    public ResponseEntity<?> atualizarParcial(@PathVariable Long cidadeId, @RequestBody Map<String, Object> cidade) {
+        Cidade cidadeEncontrado = cadastroCidadeService.obter(cidadeId);
+
+        if (cidadeEncontrado == null)
+            return ResponseEntity.notFound().build();
+
+        merge(cidade, cidadeEncontrado);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void merge(Map<String, Object> cidadeOrigem, Cidade cidadeDestino) {
+        cidadeOrigem.forEach((s, o) -> {
+            System.out.println("propriedade = " + s + " | valor = " + o);
+            System.out.println("cidadeEncontrado = " + cidadeDestino);
+        });
     }
 }
