@@ -1,6 +1,6 @@
 package tech.bacuri.bacurifood.infrastructure.repository;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.repository.CidadeRepository;
@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Component
+@Repository
 public class CidadeRepositoryImpl implements CidadeRepository {
 
     @PersistenceContext

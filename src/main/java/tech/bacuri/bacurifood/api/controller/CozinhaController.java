@@ -33,6 +33,11 @@ public class CozinhaController {
         return ResponseEntity.ok(new CozinhasXmlWrapper(cadastroCozinhaService.listar()));
     }
 
+    @GetMapping("/por-nome")
+    public ResponseEntity<?> buscarPorNome(@RequestParam("nome") String nome) {
+        return ResponseEntity.ok(cozinhaRepository.consultarPorNome(nome));
+    }
+
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> obter(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cadastroCozinhaService.obter(cozinhaId);
