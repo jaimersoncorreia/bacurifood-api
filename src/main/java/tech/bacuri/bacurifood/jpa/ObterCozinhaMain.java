@@ -16,6 +16,6 @@ public class ObterCozinhaMain {
         CozinhaRepository teste = context.getBean(CozinhaRepository.class);
 
 
-        System.out.println("teste.obter(1L) = " + teste.obter(1L));
+        System.out.println("teste.obter(1L) = " + teste.getReferenceById(1L));
     }
 }

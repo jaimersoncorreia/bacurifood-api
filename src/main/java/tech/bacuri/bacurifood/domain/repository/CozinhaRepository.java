@@ -1,18 +1,12 @@
 package tech.bacuri.bacurifood.domain.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 
 import java.util.List;
 
-public interface CozinhaRepository {
-
-    List<Cozinha> listar();
-
-    List<Cozinha> consultarPorNome(String nome);
-
-    Cozinha obter(Long id);
-
-    Cozinha salvar(Cozinha cozinha);
-
-    void remover(Long cozinhaId);
+@Repository
+public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
+    List<Cozinha> findAllByNomeContaining(String string);
 }

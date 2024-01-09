@@ -16,10 +16,10 @@ public class ConsultaCozinhaMain {
 
         CozinhaRepository cadastroCozinha = context.getBean(CozinhaRepository.class);
 
-        cadastroCozinha.salvar(Cozinha.builder().nome("Japonesa").build());
-        cadastroCozinha.salvar(Cozinha.builder().nome("Alemã").build());
-        cadastroCozinha.salvar(Cozinha.builder().nome("Francesa").build());
+        cadastroCozinha.save(Cozinha.builder().nome("Japonesa").build());
+        cadastroCozinha.save(Cozinha.builder().nome("Alemã").build());
+        cadastroCozinha.save(Cozinha.builder().nome("Francesa").build());
 
-        cadastroCozinha.listar().forEach(cozinha -> System.out.println("cozinha = " + cozinha));
+        cadastroCozinha.findAll().forEach(cozinha -> System.out.println("cozinha = " + cozinha));
     }
 }

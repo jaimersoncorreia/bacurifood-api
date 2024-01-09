@@ -17,9 +17,9 @@ public class AtualizarCozinhaMain {
         CozinhaRepository teste = context.getBean(CozinhaRepository.class);
 
         Cozinha brasileira = Cozinha.builder().id(1L).nome("Brasileira").build();
-        teste.salvar(brasileira);
+        teste.save(brasileira);
 
 
-        System.out.println("teste.obter(1L) = " + teste.obter(1L));
+        System.out.println("teste.obter(1L) = " + teste.getReferenceById(1L));
     }
 }

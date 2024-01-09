@@ -18,20 +18,21 @@ public class CadastroCozinhaService {
     private final CozinhaRepository cozinhaRepository;
 
     public Cozinha salvar(Cozinha cozinha) {
-        return cozinhaRepository.salvar(cozinha);
+        return cozinhaRepository.save(cozinha);
     }
 
     public List<Cozinha> listar() {
-        return cozinhaRepository.listar();
+        return cozinhaRepository.findAll();
     }
 
     public Cozinha obter(Long cozinhaId) {
-        return cozinhaRepository.obter(cozinhaId);
+        return cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Não encontrada"));
     }
 
     public void remover(Long cozinhaId) {
         try {
-            cozinhaRepository.remover(cozinhaId);
+            cozinhaRepository.deleteById(cozinhaId);
         } catch (EmptyResultDataAccessException e) {
             String msg = String.format("Não existe cadastro de cozinha com p código %d", cozinhaId);
             throw new EntidadeNaoEncontradaException(msg);

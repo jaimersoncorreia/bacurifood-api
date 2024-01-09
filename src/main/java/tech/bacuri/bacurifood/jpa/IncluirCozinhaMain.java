@@ -16,14 +16,14 @@ public class IncluirCozinhaMain {
 
         CozinhaRepository teste = context.getBean(CozinhaRepository.class);
 
-        Cozinha japonesa = teste.salvar(Cozinha.builder().nome("Japonesa").build());
-        Cozinha alema = teste.salvar(Cozinha.builder().nome("Alemã").build());
-        Cozinha francesa = teste.salvar(Cozinha.builder().nome("Francesa").build());
+        Cozinha japonesa = teste.save(Cozinha.builder().nome("Japonesa").build());
+        Cozinha alema = teste.save(Cozinha.builder().nome("Alemã").build());
+        Cozinha francesa = teste.save(Cozinha.builder().nome("Francesa").build());
 
         System.out.println("japonesa = " + japonesa);
         System.out.println("alema = " + alema);
         System.out.println("francesa = " + francesa);
 
-        teste.listar().forEach(System.out::println);
+        teste.findAll().forEach(System.out::println);
     }
 }
