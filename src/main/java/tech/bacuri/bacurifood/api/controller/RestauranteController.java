@@ -57,6 +57,11 @@ public class RestauranteController {
         return ResponseEntity.ok(cadastroRestauranteService.consultarPorNome(nome, cozinhaId));
     }
 
+    @GetMapping("/consultarPorNome2")
+    public ResponseEntity<?> consultarPorNome2(@RequestParam("nome") String nome, Long cozinhaId) {
+        return ResponseEntity.ok(cadastroRestauranteService.consultarPorNome2(nome, cozinhaId));
+    }
+
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
         try {

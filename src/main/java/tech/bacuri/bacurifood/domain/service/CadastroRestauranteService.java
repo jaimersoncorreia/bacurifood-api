@@ -56,4 +56,7 @@ public class CadastroRestauranteService {
     public List<Restaurante> consultarPorNome(String nome, Long cozinhaId) {
         return restauranteRepository.consultarPorNome(nome, cozinhaId);
     }
+    public List<Restaurante> consultarPorNome2(String nome, Long cozinhaId) {
+        return restauranteRepository.consultarPorNome2(nome, cozinhaId);
+    }
 }
