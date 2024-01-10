@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
     List<Cozinha> findAllByNomeContaining(String string);
+
+    boolean existsByNome(String nome);
 }

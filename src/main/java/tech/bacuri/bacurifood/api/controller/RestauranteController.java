@@ -37,6 +37,21 @@ public class RestauranteController {
         }
     }
 
+    @GetMapping("/primeiro-por-nome")
+    public ResponseEntity<?> buscarPrimeiroPorNome(@RequestParam("nome") String nome) {
+        return ResponseEntity.ok(cadastroRestauranteService.findFirstRestauranteByNomeContaining(nome));
+    }
+
+    @GetMapping("/top-two")
+    public ResponseEntity<?> topTwo(@RequestParam("nome") String nome) {
+        return ResponseEntity.ok(cadastroRestauranteService.findTop2RestauranteByNomeContaining(nome));
+    }
+
+    @GetMapping("/count-cozinhas")
+    public ResponseEntity<?> countCozinhas(@RequestParam("id") Long id) {
+        return ResponseEntity.ok(cadastroRestauranteService.countByCozinhaId(id));
+    }
+
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
         try {

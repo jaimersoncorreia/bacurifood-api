@@ -38,4 +38,18 @@ public class CadastroRestauranteService {
     public Restaurante atualizar(Restaurante restaurante) {
         return salvar(restaurante);
     }
+
+    public Restaurante findFirstRestauranteByNomeContaining(String nome) {
+        return restauranteRepository.findFirstRestauranteByNomeContaining(nome)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String
+                .format("Não existe cadastro de restaurante com o código %s", nome)));
+    }
+
+    public List<Restaurante> findTop2RestauranteByNomeContaining(String nome) {
+        return restauranteRepository.findTop2RestauranteByNomeContaining(nome);
+    }
+
+    public Long countByCozinhaId(Long id) {
+        return restauranteRepository.countByCozinhaId(id);
+    }
 }
