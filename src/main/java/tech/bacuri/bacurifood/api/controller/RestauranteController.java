@@ -52,6 +52,11 @@ public class RestauranteController {
         return ResponseEntity.ok(cadastroRestauranteService.countByCozinhaId(id));
     }
 
+    @GetMapping("/consultarPorNome")
+    public ResponseEntity<?> consultarPorNome(@RequestParam("nome") String nome, Long cozinhaId) {
+        return ResponseEntity.ok(cadastroRestauranteService.consultarPorNome(nome, cozinhaId));
+    }
+
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
         try {

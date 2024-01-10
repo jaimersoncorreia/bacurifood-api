@@ -42,7 +42,7 @@ public class CadastroRestauranteService {
     public Restaurante findFirstRestauranteByNomeContaining(String nome) {
         return restauranteRepository.findFirstRestauranteByNomeContaining(nome)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(String
-                .format("Não existe cadastro de restaurante com o código %s", nome)));
+                        .format("Não existe cadastro de restaurante com o código %s", nome)));
     }
 
     public List<Restaurante> findTop2RestauranteByNomeContaining(String nome) {
@@ -51,5 +51,9 @@ public class CadastroRestauranteService {
 
     public Long countByCozinhaId(Long id) {
         return restauranteRepository.countByCozinhaId(id);
+    }
+
+    public List<Restaurante> consultarPorNome(String nome, Long cozinhaId) {
+        return restauranteRepository.consultarPorNome(nome, cozinhaId);
     }
 }
