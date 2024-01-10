@@ -64,7 +64,7 @@ public class RestauranteController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<?> find(@RequestParam("nome") String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+    public ResponseEntity<?> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
         return ResponseEntity.ok(cadastroRestauranteService.find(nome, taxaFreteInicial, taxaFreteFinal));
     }
 
