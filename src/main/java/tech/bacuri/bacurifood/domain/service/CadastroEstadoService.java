@@ -16,15 +16,18 @@ public class CadastroEstadoService {
     private EstadoRepository estadoRepository;
 
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     public Estado salvar(Estado estado) {
-        return estadoRepository.salvar(estado);
+        return estadoRepository.save(estado);
     }
 
     public Estado obter(Long idEstado) {
-        return estadoRepository.obter(idEstado);
+        return estadoRepository
+                .findById(idEstado)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String
+                        .format("Estado de código %d não encontrado", idEstado)));
     }
 
     public void remover(Long estadoId) {
@@ -33,7 +36,7 @@ public class CadastroEstadoService {
             throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", estadoId));
 
         try {
-            estadoRepository.remover(estadoEncontrado);
+            estadoRepository.delete(estadoEncontrado);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Estado de código %d não pode ser removida, pois está em uso", estadoId));
         }

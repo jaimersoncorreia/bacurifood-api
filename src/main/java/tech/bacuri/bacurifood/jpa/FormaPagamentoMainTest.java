@@ -19,16 +19,16 @@ public class FormaPagamentoMainTest {
 
         FormaPagamento formaPagamento0 = FormaPagamento.builder().descricao("FormaPagamento Descrição0").build();
         FormaPagamento formaPagamento1 = FormaPagamento.builder().descricao("FormaPagamento Descrição1").build();
-        assert formaPagamentoRepository.salvar(formaPagamento0) != null : "Era para ter vindo permisao";
-        assert formaPagamentoRepository.salvar(formaPagamento1) != null : "Era para ter vindo permisao";
+        assert formaPagamentoRepository.save(formaPagamento0) != null : "Era para ter vindo permisao";
+        assert formaPagamentoRepository.save(formaPagamento1) != null : "Era para ter vindo permisao";
 
-        assert Objects.equals(formaPagamentoRepository.obter(1L).getDescricao(), "FormaPagamento Descrição0") : "Não é FormaPagamento0";
-        assert Objects.equals(formaPagamentoRepository.obter(2L).getDescricao(), "FormaPagamento Descrição1") : "Não é FormaPagamento1";
+        assert Objects.equals(formaPagamentoRepository.findById(1L).get().getDescricao(), "FormaPagamento Descrição0") : "Não é FormaPagamento0";
+        assert Objects.equals(formaPagamentoRepository.findById(2L).get().getDescricao(), "FormaPagamento Descrição1") : "Não é FormaPagamento1";
 
-        assert formaPagamentoRepository.todas().size() == 2 : "Era para tem vindo 2";
+        assert formaPagamentoRepository.findAll().size() == 2 : "Era para tem vindo 2";
 
-        formaPagamentoRepository.remover(formaPagamentoRepository.obter(1L));
+        formaPagamentoRepository.delete(formaPagamentoRepository.findById(1L).get());
 
-        assert formaPagamentoRepository.obter(1L) == null : "Era vim null";
+        assert formaPagamentoRepository.findById(1L).get() == null : "Era vim null";
     }
 }

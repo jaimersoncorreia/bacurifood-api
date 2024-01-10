@@ -1,16 +1,9 @@
 package tech.bacuri.bacurifood.domain.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 
-import java.util.List;
-
-public interface RestauranteRepository {
-
-    List<Restaurante> listar();
-
-    Restaurante obter(Long id);
-
-    Restaurante salvar(Restaurante restaurante);
-
-    void remover(Restaurante restaurante);
+@Repository
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 }

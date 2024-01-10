@@ -19,12 +19,12 @@ public class RemoverRestauranteMain {
 
         RestauranteRepository repository = context.getBean(RestauranteRepository.class);
 
-        repository.salvar(Restaurante.builder().nome("Restaurante da Joana").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
-        repository.remover(Restaurante.builder().id(4L).build());
+        repository.save(Restaurante.builder().nome("Restaurante da Joana").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
+        repository.delete(Restaurante.builder().id(4L).build());
 
-        assert repository.obter(4L) != null;
-        System.out.println(repository.obter(4L) != null);
-        System.out.println("teste.obter(4L) = " + repository.obter(4L));
+        assert repository.findById(4L).isPresent();
+        System.out.println(repository.findById(4L).isPresent());
+        System.out.println("teste.obter(4L) = " + repository.findById(4L));
 
     }
 }

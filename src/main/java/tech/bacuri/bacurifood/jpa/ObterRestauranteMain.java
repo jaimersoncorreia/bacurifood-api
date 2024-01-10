@@ -18,9 +18,9 @@ public class ObterRestauranteMain {
 
         RestauranteRepository repository = context.getBean(RestauranteRepository.class);
 
-        repository.salvar(Restaurante.builder().nome("Restaurante da Joana").taxaFrete(new BigDecimal("50.00")).build());
+        repository.save(Restaurante.builder().nome("Restaurante da Joana").taxaFrete(new BigDecimal("50.00")).build());
 
 
-        System.out.println("teste.obter(1L) = " + repository.obter(1L));
+        System.out.println("teste.obter(1L) = " + repository.findById(1L));
     }
 }

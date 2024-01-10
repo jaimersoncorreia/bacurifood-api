@@ -27,6 +27,15 @@ public class CidadeController {
         return ResponseEntity.ok(cadastroCidadeService.listar());
     }
 
+    @GetMapping("/{cidadeId}")
+    public ResponseEntity<?> obter(@PathVariable Long cidadeId) {
+        try {
+            return ResponseEntity.ok(cadastroCidadeService.obter(cidadeId));
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody Cidade cidade) {
         return new ResponseEntity<>(cadastroCidadeService.salvar(cidade), HttpStatus.CREATED);

@@ -20,14 +20,14 @@ public class IncluirRestauranteMain {
 
         RestauranteRepository repository = context.getBean(RestauranteRepository.class);
 
-        Restaurante picanharia = repository.salvar(Restaurante.builder().nome("Picanharia").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
-        Restaurante maminha = repository.salvar(Restaurante.builder().nome("Maminha").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(2L).build()).build());
-        Restaurante file = repository.salvar(Restaurante.builder().nome("Filé").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
+        Restaurante picanharia = repository.save(Restaurante.builder().nome("Picanharia").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
+        Restaurante maminha = repository.save(Restaurante.builder().nome("Maminha").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(2L).build()).build());
+        Restaurante file = repository.save(Restaurante.builder().nome("Filé").taxaFrete(new BigDecimal("50.00")).cozinha(Cozinha.builder().id(1L).build()).build());
 
         System.out.println("picanharia = " + picanharia);
         System.out.println("maminha = " + maminha);
         System.out.println("file = " + file);
 
-        repository.listar().forEach(System.out::println);
+        repository.findAll().forEach(System.out::println);
     }
 }

@@ -14,23 +14,20 @@ public class CadastroCidadeService {
     private CidadeRepository cidadeRepository;
 
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     public Cidade salvar(Cidade cidade) {
-        return cidadeRepository.salvar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     public Cidade obter(Long cidadeId) {
-        return cidadeRepository.obter(cidadeId);
+        return cidadeRepository.findById(cidadeId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String
+                        .format("Cidade de código %d não foi encontrado", cidadeId)));
     }
 
     public void remover(Long cidadeId) {
-        Cidade cidadeRetornada = cidadeRepository.obter(cidadeId);
-        if (cidadeRetornada == null) {
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", cidadeId));
-        }
-
-        cidadeRepository.remover(cidadeRetornada);
+        cidadeRepository.delete(obter(cidadeId));
     }
 }

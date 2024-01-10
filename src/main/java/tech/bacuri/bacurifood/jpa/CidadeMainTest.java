@@ -16,20 +16,20 @@ public class CidadeMainTest {
                 .web(WebApplicationType.NONE)
                 .run(args);
 
-        CidadeRepository teste = context.getBean(CidadeRepository.class);
+        CidadeRepository cidadeRepository = context.getBean(CidadeRepository.class);
 
         Cidade manaus = Cidade.builder().nome("Manaus").estado(Estado.builder().id(1L).nome("Amazonas").build()).build();
         Cidade careiroDaVarzea = Cidade.builder().nome("Careiro da Várzea").estado(Estado.builder().id(1L).nome("Amazonas").build()).build();
-        teste.salvar(manaus);
-        teste.salvar(careiroDaVarzea);
+        cidadeRepository.save(manaus);
+        cidadeRepository.save(careiroDaVarzea);
 
-        assert Objects.equals(teste.obter(1L).getNome(), "Manaus") : "Não é Manaus";
-        assert Objects.equals(teste.obter(2L).getNome(), "Careiro da Várzea") : "Não é Careiro da Várzea";
+        assert Objects.equals(cidadeRepository.findById(1L).get().getNome(), "Manaus") : "Não é Manaus";
+        assert Objects.equals(cidadeRepository.findById(2L).get().getNome(), "Careiro da Várzea") : "Não é Careiro da Várzea";
 
-        assert teste.listar().size() == 2 : "Era para tem vindo 2";
+        assert cidadeRepository.findAll().size() == 2 : "Era para tem vindo 2";
 
-        teste.remover(teste.obter(1L));
+        cidadeRepository.delete(cidadeRepository.findById(1L).get());
 
-        assert teste.obter(1L) == null : "Era vim null";
+        assert cidadeRepository.findById(1L).isPresent() : "Era vim null";
     }
 }

@@ -19,16 +19,16 @@ public class EstadoMainTest {
 
         Estado acre = Estado.builder().nome("Acre").build();
         Estado roraima = Estado.builder().nome("Roraima").build();
-        estadoRepository.salvar(acre);
-        estadoRepository.salvar(roraima);
+        estadoRepository.save(acre);
+        estadoRepository.save(roraima);
 
-        assert Objects.equals(estadoRepository.obter(1L).getNome(), "Acre") : "Não é Acre";
-        assert Objects.equals(estadoRepository.obter(2L).getNome(), "Roraima") : "Não é Roraima";
+        assert Objects.equals(estadoRepository.findById(1L).get().getNome(), "Acre") : "Não é Acre";
+        assert Objects.equals(estadoRepository.findById(2L).get().getNome(), "Roraima") : "Não é Roraima";
 
-        assert estadoRepository.listar().size() == 2 : "Era para tem vindo 2";
+        assert estadoRepository.findAll().size() == 2 : "Era para tem vindo 2";
 
-        estadoRepository.remover(estadoRepository.obter(1L));
+        estadoRepository.delete(estadoRepository.findById(1L).get());
 
-        assert estadoRepository.obter(1L) == null : "Era vim null";
+        assert estadoRepository.findById(1L).isPresent() : "Era vim null";
     }
 }

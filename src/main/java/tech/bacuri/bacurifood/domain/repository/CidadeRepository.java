@@ -1,16 +1,10 @@
 package tech.bacuri.bacurifood.domain.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 
-import java.util.List;
+@Repository
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 
-public interface CidadeRepository {
-
-    List<Cidade> listar();
-
-    Cidade obter(Long id);
-
-    Cidade salvar(Cidade cidade);
-
-    void remover(Cidade cidade);
 }
