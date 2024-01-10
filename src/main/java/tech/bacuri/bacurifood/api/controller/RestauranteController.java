@@ -12,6 +12,7 @@ import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -60,6 +61,11 @@ public class RestauranteController {
     @GetMapping("/consultarPorNome2")
     public ResponseEntity<?> consultarPorNome2(@RequestParam("nome") String nome, Long cozinhaId) {
         return ResponseEntity.ok(cadastroRestauranteService.consultarPorNome2(nome, cozinhaId));
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> find(@RequestParam("nome") String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+        return ResponseEntity.ok(cadastroRestauranteService.find(nome, taxaFreteInicial, taxaFreteFinal));
     }
 
     @PostMapping

@@ -7,6 +7,7 @@ import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -56,7 +57,12 @@ public class CadastroRestauranteService {
     public List<Restaurante> consultarPorNome(String nome, Long cozinhaId) {
         return restauranteRepository.consultarPorNome(nome, cozinhaId);
     }
+
     public List<Restaurante> consultarPorNome2(String nome, Long cozinhaId) {
         return restauranteRepository.consultarPorNome2(nome, cozinhaId);
+    }
+
+    public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
     }
 }
