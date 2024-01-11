@@ -1,6 +1,7 @@
 package tech.bacuri.bacurifood.infrastructure.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepositoryQueries;
 
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -26,11 +28,21 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
         Root<Restaurante> root = criteria.from(Restaurante.class);
 
-        Predicate predicateNome = builder.like(root.get("nome"), "%" + nome + "%");
-        Predicate predicateInicial = builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial);
-        Predicate predicateFinal = builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal);
+        ArrayList<Predicate> predicates = new ArrayList<>();
 
-        criteria.where(predicateNome, predicateInicial, predicateFinal);
+        if (StringUtils.hasLength(nome)) {
+            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
+        }
+        if (taxaFreteInicial != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+        }
+
+        if (taxaFreteFinal != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+        }
+
+
+        criteria.where(predicates.toArray(new Predicate[0]));
 
         return manager.createQuery(criteria).getResultList();
     }
