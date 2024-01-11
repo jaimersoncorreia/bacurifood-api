@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
-import tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteComFreteGratisSpec;
-import tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteComNomeSemelhateSpec;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 @AllArgsConstructor
 @RestController
@@ -72,10 +73,10 @@ public class RestauranteController {
 
     @GetMapping("/freteGratis")
     public ResponseEntity<?> freteGratis(String nome) {
-        RestauranteComFreteGratisSpec comFreteGratisSpec = new RestauranteComFreteGratisSpec();
-        RestauranteComNomeSemelhateSpec comNomeSemelhateSpec = new RestauranteComNomeSemelhateSpec(nome);
-
-        return ResponseEntity.ok(cadastroRestauranteService.findAll(comFreteGratisSpec.and(comNomeSemelhateSpec)));
+//        RestauranteComFreteGratisSpec comFreteGratisSpec = new RestauranteComFreteGratisSpec();
+//        RestauranteComNomeSemelhateSpec comNomeSemelhateSpec = new RestauranteComNomeSemelhateSpec(nome);
+        System.out.println("nome = " + nome);
+        return ResponseEntity.ok(cadastroRestauranteService.findAll(comFreteGratis().and(comNomeSemelhante(nome))));
     }
 
     @PostMapping
