@@ -68,6 +68,13 @@ public class RestauranteController {
         return ResponseEntity.ok(cadastroRestauranteService.find(nome, taxaFreteInicial, taxaFreteFinal));
     }
 
+    @GetMapping("/freteGratis")
+    public ResponseEntity<?> freteGratis(String nome) {
+        RestauranteComFreteGratisSpec restauranteComFreteGratisSpec = new RestauranteComFreteGratisSpec();
+        RestauranteComNomeSemelhateSpec restauranteComNomeSemelhateSpec = new RestauranteComNomeSemelhateSpec(nome);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
         try {
