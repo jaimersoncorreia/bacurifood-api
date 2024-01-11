@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
+import tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteComFreteGratisSpec;
+import tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteComNomeSemelhateSpec;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -70,9 +72,10 @@ public class RestauranteController {
 
     @GetMapping("/freteGratis")
     public ResponseEntity<?> freteGratis(String nome) {
-        RestauranteComFreteGratisSpec restauranteComFreteGratisSpec = new RestauranteComFreteGratisSpec();
-        RestauranteComNomeSemelhateSpec restauranteComNomeSemelhateSpec = new RestauranteComNomeSemelhateSpec(nome);
-        return ResponseEntity.ok().build();
+        RestauranteComFreteGratisSpec comFreteGratisSpec = new RestauranteComFreteGratisSpec();
+        RestauranteComNomeSemelhateSpec comNomeSemelhateSpec = new RestauranteComNomeSemelhateSpec(nome);
+
+        return ResponseEntity.ok(cadastroRestauranteService.findAll(comFreteGratisSpec.and(comNomeSemelhateSpec)));
     }
 
     @PostMapping
