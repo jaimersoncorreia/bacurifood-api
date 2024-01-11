@@ -1,8 +1,11 @@
 package tech.bacuri.bacurifood.infrastructure.repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
+import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepositoryQueries;
 
 import javax.persistence.EntityManager;
@@ -15,11 +18,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
+
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     @PersistenceContext
     private EntityManager manager;
+
+    @Autowired
+    @Lazy
+    private RestauranteRepository restauranteRepository;
 
     @Override
     public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
@@ -45,5 +55,10 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         criteria.where(predicates.toArray(new Predicate[0]));
 
         return manager.createQuery(criteria).getResultList();
+    }
+
+    @Override
+    public List<Restaurante> findComFreteGratis(String nome) {
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 }

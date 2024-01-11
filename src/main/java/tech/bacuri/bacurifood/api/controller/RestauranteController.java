@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
-import static tech.bacuri.bacurifood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
-
 @AllArgsConstructor
 @RestController
 @RequestMapping("/restaurantes")
@@ -73,10 +70,7 @@ public class RestauranteController {
 
     @GetMapping("/freteGratis")
     public ResponseEntity<?> freteGratis(String nome) {
-//        RestauranteComFreteGratisSpec comFreteGratisSpec = new RestauranteComFreteGratisSpec();
-//        RestauranteComNomeSemelhateSpec comNomeSemelhateSpec = new RestauranteComNomeSemelhateSpec(nome);
-        System.out.println("nome = " + nome);
-        return ResponseEntity.ok(cadastroRestauranteService.findAll(comFreteGratis().and(comNomeSemelhante(nome))));
+        return ResponseEntity.ok(cadastroRestauranteService.findComFreteGratis(nome));
     }
 
     @PostMapping

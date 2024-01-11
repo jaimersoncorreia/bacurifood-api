@@ -1,7 +1,6 @@
 package tech.bacuri.bacurifood.domain.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
@@ -67,7 +66,7 @@ public class CadastroRestauranteService {
         return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
     }
 
-    public List<Restaurante> findAll(Specification<Restaurante> specification) {
-        return restauranteRepository.findAll(specification);
+    public List<Restaurante> findComFreteGratis(String nome) {
+        return restauranteRepository.findComFreteGratis(nome);
     }
 }
