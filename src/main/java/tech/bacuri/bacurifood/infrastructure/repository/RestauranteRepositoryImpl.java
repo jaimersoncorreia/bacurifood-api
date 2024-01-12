@@ -51,7 +51,6 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
             predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
         }
 
-
         criteria.where(predicates.toArray(new Predicate[0]));
 
         return manager.createQuery(criteria).getResultList();

@@ -73,6 +73,11 @@ public class RestauranteController {
         return ResponseEntity.ok(cadastroRestauranteService.findComFreteGratis(nome));
     }
 
+    @GetMapping("/buscarPrimeiro")
+    public ResponseEntity<?> buscarPrimeiro() {
+        return ResponseEntity.ok(cadastroRestauranteService.buscarPrimeiro());
+    }
+
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
         try {

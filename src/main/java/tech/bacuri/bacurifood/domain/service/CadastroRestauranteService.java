@@ -69,4 +69,9 @@ public class CadastroRestauranteService {
     public List<Restaurante> findComFreteGratis(String nome) {
         return restauranteRepository.findComFreteGratis(nome);
     }
+
+    public Restaurante buscarPrimeiro() {
+        return restauranteRepository.buscarPrimeiro()
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado!!"));
+    }
 }

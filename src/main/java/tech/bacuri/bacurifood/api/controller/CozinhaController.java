@@ -43,6 +43,11 @@ public class CozinhaController {
         return ResponseEntity.ok(cozinhaRepository.existsByNome(nome));
     }
 
+    @GetMapping("/buscarPrimeiro")
+    public ResponseEntity<?> buscarPrimeiro() {
+        return ResponseEntity.ok(cozinhaRepository.buscarPrimeiro().orElseThrow());
+    }
+
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> obter(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cadastroCozinhaService.obter(cozinhaId);
