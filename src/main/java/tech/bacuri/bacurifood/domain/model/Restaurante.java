@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -54,7 +55,7 @@ public class Restaurante {
     private LocalDateTime dataAtualizacao;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
