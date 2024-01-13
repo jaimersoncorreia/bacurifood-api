@@ -26,7 +26,11 @@ public class RestauranteController {
 
     @GetMapping
     public ResponseEntity<List<Restaurante>> listar() {
-        return ResponseEntity.ok(cadastroRestauranteService.listar());
+        List<Restaurante> restaurantes = cadastroRestauranteService.listar();
+        System.out.println("Restaurantes = " + restaurantes.get(0).getNome());
+        restaurantes.get(0).getFormasPagamento().forEach(System.out::println);
+
+        return ResponseEntity.ok(restaurantes);
     }
 
     @GetMapping("/{restauranteId}")
