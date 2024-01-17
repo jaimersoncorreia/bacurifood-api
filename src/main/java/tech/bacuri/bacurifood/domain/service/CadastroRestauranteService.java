@@ -2,7 +2,7 @@ package tech.bacuri.bacurifood.domain.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
+import tech.bacuri.bacurifood.domain.exception.RestauranteNaoEncontradoException;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
@@ -23,8 +23,7 @@ public class CadastroRestauranteService {
     public Restaurante obter(Long restauranteId) {
         return restauranteRepository
                 .findById(restauranteId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String
-                        .format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
     }
 
     public Restaurante salvar(Restaurante restaurante) {
