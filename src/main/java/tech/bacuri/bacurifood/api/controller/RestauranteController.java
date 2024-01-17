@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
+import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
 
@@ -36,7 +38,11 @@ public class RestauranteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurante salvar(@RequestBody Restaurante restaurante) {
-        return cadastroRestauranteService.salvar(restaurante);
+        try {
+            return cadastroRestauranteService.salvar(restaurante);
+        } catch (CozinhaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 
     @PutMapping("/{restauranteId}")
@@ -46,7 +52,11 @@ public class RestauranteController {
 
         BeanUtils.copyProperties(restaurante, restauranteObtido,
                 "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-        return cadastroRestauranteService.atualizar(restauranteObtido);
+        try {
+            return cadastroRestauranteService.atualizar(restauranteObtido);
+        } catch (CozinhaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/{restauranteId}")
