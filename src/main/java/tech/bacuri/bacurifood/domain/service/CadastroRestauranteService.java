@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class CadastroRestauranteService {
+    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe cadastro de restaurante com o código %d";
+    public static final String MSG_COZINHA_NAO_ENCONTRADA = "Não existe cadastro de cozinha com código %d";
     private final RestauranteRepository restauranteRepository;
     private CozinhaRepository cozinhaRepository;
 
@@ -24,14 +26,14 @@ public class CadastroRestauranteService {
         return restauranteRepository
                 .findById(restauranteId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(String
-                        .format("Não existe cadastro de restaurante com o código %d", restauranteId)));
+                        .format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
     }
 
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         if (!cozinhaRepository.existsById(cozinhaId))
-            throw new EntidadeNaoEncontradaException(String.format("Não existe cadastro de cozinha com código %d", cozinhaId));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NAO_ENCONTRADA, cozinhaId));
 
         return restauranteRepository.save(restaurante);
     }
