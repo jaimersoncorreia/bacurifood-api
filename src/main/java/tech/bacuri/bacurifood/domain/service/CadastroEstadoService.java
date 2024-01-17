@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Component
 public class CadastroEstadoService {
+    public static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe cadastro de Estado com código %d";
+    public static final String MSG_ESTADO_EM_USO = "Estado de código %d não pode ser removida, pois está em uso";
     private EstadoRepository estadoRepository;
 
     public List<Estado> listar() {
@@ -24,21 +26,18 @@ public class CadastroEstadoService {
     }
 
     public Estado obter(Long idEstado) {
-        return estadoRepository
-                .findById(idEstado)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String
-                        .format("Estado de código %d não encontrado", idEstado)));
+        return estadoRepository.findById(idEstado)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENCONTRADO, idEstado)));
     }
 
     public void remover(Long estadoId) {
-        Estado estadoEncontrado = obter(estadoId);
-        if (estadoEncontrado == null)
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", estadoId));
+        if (!estadoRepository.existsById(estadoId))
+            throw new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId));
 
         try {
-            estadoRepository.delete(estadoEncontrado);
+            estadoRepository.delete(obter(estadoId));
         } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format("Estado de código %d não pode ser removida, pois está em uso", estadoId));
+            throw new EntidadeEmUsoException(String.format(MSG_ESTADO_EM_USO, estadoId));
         }
     }
 }
