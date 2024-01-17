@@ -47,12 +47,9 @@ public class CozinhaController {
     }
 
     @GetMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> obter(@PathVariable Long cozinhaId) {
-        Cozinha cozinha = cadastroCozinhaService.obter(cozinhaId);
-        if (cozinha == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(cozinha);
+    @ResponseStatus(HttpStatus.OK)
+    public Cozinha obter(@PathVariable Long cozinhaId) {
+        return cadastroCozinhaService.obter(cozinhaId);
     }
 
     @PostMapping
@@ -61,14 +58,12 @@ public class CozinhaController {
     }
 
     @PutMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+    @ResponseStatus(HttpStatus.OK)
+    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
         Cozinha cozinhaObtida = cadastroCozinhaService.obter(cozinhaId);
-        if (cozinhaObtida == null)
-            return ResponseEntity.notFound().build();
-
         BeanUtils.copyProperties(cozinha, cozinhaObtida, "id");
 
-        return new ResponseEntity<>(cadastroCozinhaService.salvar(cozinhaObtida), HttpStatus.OK);
+        return cadastroCozinhaService.salvar(cozinhaObtida);
     }
 
     @DeleteMapping("/{cozinhaId}")
