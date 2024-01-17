@@ -3,18 +3,23 @@ package tech.bacuri.bacurifood.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.api.exceptionhandler.Problema;
+import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.EstadoNaoEncontradoException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.service.CadastroCidadeService;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static org.springframework.http.HttpStatus.*;
 
 @AllArgsConstructor
 @RestController
@@ -34,7 +39,7 @@ public class CidadeController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(CREATED)
     public Cidade salvar(@RequestBody Cidade cidade) {
         try {
             return cadastroCidadeService.salvar(cidade);
@@ -56,7 +61,7 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{cidadeId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {
         cadastroCidadeService.remover(cidadeId);
     }
@@ -80,5 +85,23 @@ public class CidadeController {
 
             ReflectionUtils.setField(field, cidadeDestino, novoValor);
         });
+    }
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e) {
+        Problema problema = Problema.builder()
+                .dataHora(LocalDateTime.now())
+                .mensagem(e.getMessage())
+                .build();
+        return ResponseEntity.status(NOT_FOUND).body(problema);
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<?> tratarNegocioException(NegocioException e) {
+        Problema problema = Problema.builder()
+                .dataHora(LocalDateTime.now())
+                .mensagem(e.getMessage())
+                .build();
+        return ResponseEntity.status(BAD_REQUEST).body(problema);
     }
 }
