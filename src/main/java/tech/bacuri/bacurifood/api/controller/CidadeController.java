@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
-import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
+import tech.bacuri.bacurifood.domain.exception.EstadoNaoEncontradoException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.service.CadastroCidadeService;
@@ -38,8 +38,8 @@ public class CidadeController {
     public Cidade salvar(@RequestBody Cidade cidade) {
         try {
             return cadastroCidadeService.salvar(cidade);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage()   );
+        } catch (EstadoNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
@@ -50,8 +50,8 @@ public class CidadeController {
 
         try {
             return cadastroCidadeService.salvar(cidadeEncontrado);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
+        } catch (EstadoNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
