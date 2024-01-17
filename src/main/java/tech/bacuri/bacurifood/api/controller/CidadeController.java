@@ -6,6 +6,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
+import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.service.CadastroCidadeService;
 
@@ -34,7 +36,11 @@ public class CidadeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cidade salvar(@RequestBody Cidade cidade) {
-        return cadastroCidadeService.salvar(cidade);
+        try {
+            return cadastroCidadeService.salvar(cidade);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage()   );
+        }
     }
 
     @PutMapping("/{cidadeId}")
@@ -42,7 +48,11 @@ public class CidadeController {
         Cidade cidadeEncontrado = cadastroCidadeService.obter(cidadeId);
         BeanUtils.copyProperties(cidade, cidadeEncontrado, "id");
 
-        return cadastroCidadeService.salvar(cidadeEncontrado);
+        try {
+            return cadastroCidadeService.salvar(cidadeEncontrado);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{cidadeId}")
