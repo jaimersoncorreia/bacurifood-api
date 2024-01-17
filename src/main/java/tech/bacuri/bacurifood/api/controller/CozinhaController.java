@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import tech.bacuri.bacurifood.api.model.CozinhasXmlWrapper;
-import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
-import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 import tech.bacuri.bacurifood.domain.service.CadastroCozinhaService;
@@ -74,28 +71,9 @@ public class CozinhaController {
         return new ResponseEntity<>(cadastroCozinhaService.salvar(cozinhaObtida), HttpStatus.OK);
     }
 
-/*    @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<?> deletar(@PathVariable Long cozinhaId) {
-        try {
-            cadastroCozinhaService.remover(cozinhaId);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
-
-        return ResponseEntity.noContent().build();
-    }*/
-
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long cozinhaId) {
-        try {
-            cadastroCozinhaService.remover(cozinhaId);
-        } catch (EntidadeEmUsoException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+        cadastroCozinhaService.remover(cozinhaId);
     }
 }

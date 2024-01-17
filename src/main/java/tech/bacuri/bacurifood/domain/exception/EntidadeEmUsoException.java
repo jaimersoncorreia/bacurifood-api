@@ -1,22 +1,14 @@
 package tech.bacuri.bacurifood.domain.exception;
 
-public class EntidadeEmUsoException extends RuntimeException {
-    public EntidadeEmUsoException() {
-    }
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
+public class EntidadeEmUsoException extends ResponseStatusException {
     public EntidadeEmUsoException(String message) {
-        super(message);
+        this(HttpStatus.CONFLICT, message);
     }
 
-    public EntidadeEmUsoException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public EntidadeEmUsoException(Throwable cause) {
-        super(cause);
-    }
-
-    public EntidadeEmUsoException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public EntidadeEmUsoException(HttpStatus status, String mensagem) {
+        super(status, mensagem);
     }
 }
