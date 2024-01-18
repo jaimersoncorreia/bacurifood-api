@@ -11,7 +11,6 @@ import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.*;
@@ -19,30 +18,43 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), NOT_FOUND, request);
+    public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
+        HttpStatus status = NOT_FOUND;
+        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+        String detail = ex.getMessage();
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> tratarNegocioException(NegocioException ex, WebRequest request) {
+    public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), BAD_REQUEST, request);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
+    public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), CONFLICT, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        Problema problema = Problema.builder().dataHora(LocalDateTime.now()).build();
-        if (body instanceof String)
-            problema.setMensagem((String) body);
+        if (body instanceof String) {
+            body = Problem.builder().status(status.value()).title((String) body).build();
+        }
 
         if (Objects.isNull(body))
-            problema.setMensagem(status.getReasonPhrase());
+            body = Problem.builder().status(status.value()).title((status.getReasonPhrase())).build();
 
-        return super.handleExceptionInternal(ex, problema, headers, status, request);
+        return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+        return Problem.builder()
+                .status(status.value())
+                .type(problemType.getUri())
+                .title(problemType.getTitle())
+                .detail(detail);
     }
 }
