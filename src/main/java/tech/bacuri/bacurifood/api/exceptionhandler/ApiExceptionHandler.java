@@ -1,8 +1,7 @@
 package tech.bacuri.bacurifood.api.exceptionhandler;
 
-import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,32 +36,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (cause instanceof InvalidFormatException)
             return handleInvalidFormatException((InvalidFormatException) cause, headers, status, request);
 
-        if (cause instanceof IgnoredPropertyException)
-            return handleIgnoredPropertyException((IgnoredPropertyException) cause, headers, status, request);
-
-        if (cause instanceof UnrecognizedPropertyException)
-            return handleUnrecognizedPropertyException((UnrecognizedPropertyException) cause, headers, status, request);
+        if (cause instanceof PropertyBindingException)
+            return handlePropertyBindingException((PropertyBindingException) cause, headers, status, request);
 
         String detail = "O corpo da requisição está inválida. Verifique erro de sintaxe";
         Problem problem = createProblemBuilder(status, MENSAGEM_INCOMPREENSIVEL, detail).build();
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex,
+    private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
                                                                        HttpHeaders headers,
                                                                        HttpStatus status,
                                                                        WebRequest request) {
-        String detail = String.format("A propriedade '%s' não reconhecida.", getPath(ex.getPath()));
-        Problem problem = createProblemBuilder(status, PROPRIEDADE_NAO_RECONHECIDA, detail).build();
-        return handleExceptionInternal(ex, problem, headers, status, request);
-    }
-
-    private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status,
-                                                                  WebRequest request) {
-        String detail = String.format("A propriedade '%s' não está acessível.", getPath(ex.getPath()));
-        Problem problem = createProblemBuilder(status, PROPRIEDADE_NAO_ACESSIVEL, detail).build();
+        String detail = String.format("A propriedade '%s' não existe. Corrija ou remova essa propriedade.", getPath(ex.getPath()));
+        Problem problem = createProblemBuilder(status, PROPRIEDADE_NAO_EXISTE, detail).build();
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
