@@ -7,7 +7,7 @@ public enum ProblemType {
     PARAMETRO_INVALIDO("/parametro-invalido", "Parametro inválido"),
     PROPRIEDADE_NAO_EXISTE("/propriedade-nao-existe", "Propriedade não existe"),
     MENSAGEM_INCOMPREENSIVEL("/mensagem-incompreensivel", "Mensagem incompreensível"),
-    ENTIDADE_NAO_ENCONTRADA("/entidade-nao-encontrada", "Entidade não encontrada"),
+    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado"),
     ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negógio");
 
