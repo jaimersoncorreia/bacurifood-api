@@ -1,7 +1,8 @@
 package tech.bacuri.bacurifood.api.exceptionhandler;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,11 @@ import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import static org.springframework.http.HttpStatus.*;
 import static tech.bacuri.bacurifood.api.exceptionhandler.ProblemType.*;
 
@@ -32,28 +35,52 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Throwable cause = ExceptionUtils.getRootCause(ex);
 
         if (cause instanceof InvalidFormatException)
-            return handleInvalidFormatException((InvalidFormatException) cause, new HttpHeaders(), status, request);
+            return handleInvalidFormatException((InvalidFormatException) cause, headers, status, request);
+
+        if (cause instanceof IgnoredPropertyException)
+            return handleIgnoredPropertyException((IgnoredPropertyException) cause, headers, status, request);
+
+        if (cause instanceof UnrecognizedPropertyException)
+            return handleUnrecognizedPropertyException((UnrecognizedPropertyException) cause, headers, status, request);
 
         String detail = "O corpo da requisição está inválida. Verifique erro de sintaxe";
-
         Problem problem = createProblemBuilder(status, MENSAGEM_INCOMPREENSIVEL, detail).build();
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex,
+                                                                       HttpHeaders headers,
+                                                                       HttpStatus status,
+                                                                       WebRequest request) {
+        String detail = String.format("A propriedade '%s' não reconhecida.", getPath(ex.getPath()));
+        Problem problem = createProblemBuilder(status, PROPRIEDADE_NAO_RECONHECIDA, detail).build();
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
+        String detail = String.format("A propriedade '%s' não está acessível.", getPath(ex.getPath()));
+        Problem problem = createProblemBuilder(status, PROPRIEDADE_NAO_ACESSIVEL, detail).build();
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
                                                                 HttpHeaders headers,
                                                                 HttpStatus status,
                                                                 WebRequest request) {
-        String path = ex.getPath().stream()
-                .map(JsonMappingException.Reference::getFieldName)
-                .collect(Collectors.joining("."));
-
-        String detail = String.format("A propriedade '%s' recebeu o valor '%s', que é de tipo inválido. " +
-                "Corrija e informe um valor compatível com o tipo '%s'.", path, ex.getValue(), ex.getTargetType().getSimpleName());
+        String detail = String.format("A propriedade '%s' recebeu o valor '%s', que é de tipo inválido. Corrija e " +
+                "informe um valor compatível com o tipo '%s'.", getPath(ex.getPath()), ex.getValue(), ex.getTargetType().getSimpleName());
 
         Problem problem = createProblemBuilder(status, MENSAGEM_INCOMPREENSIVEL, detail).build();
-
         return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private static String getPath(List<Reference> references) {
+        return references.stream()
+                .map(Reference::getFieldName)
+                .collect(Collectors.joining("."));
     }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
