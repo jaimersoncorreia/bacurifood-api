@@ -3,6 +3,7 @@ package tech.bacuri.bacurifood.api.exceptionhandler;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
@@ -45,9 +47,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
-                                                                       HttpHeaders headers,
-                                                                       HttpStatus status,
-                                                                       WebRequest request) {
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
         String detail = String.format("A propriedade '%s' não existe. Corrija ou remova essa propriedade.", getPath(ex.getPath()));
         Problem problem = createProblemBuilder(status, PROPRIEDADE_NAO_EXISTE, detail).build();
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -63,6 +65,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Problem problem = createProblemBuilder(status, MENSAGEM_INCOMPREENSIVEL, detail).build();
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
+
 
     private static String getPath(List<Reference> references) {
         return references.stream()
@@ -111,6 +114,26 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
+    private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex,
+                                                                             HttpHeaders headers,
+                                                                             HttpStatus status,
+                                                                             WebRequest request) {
+        String tipoVariavel = Objects.requireNonNull(ex.getRequiredType()).getSimpleName();
+        String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', que é de tipo inválido. Corrija e " +
+                "informe um valor compatível com o tipo '%s'.", ex.getName(), ex.getValue(), tipoVariavel);
+
+        Problem problem = createProblemBuilder(status, PARAMETRO_INVALIDO, detail).build();
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        if (ex instanceof MethodArgumentTypeMismatchException)
+            return handleMethodArgumentTypeMismatchException((MethodArgumentTypeMismatchException) ex, headers, status, request);
+
+        return super.handleTypeMismatch(ex, headers, status, request);
+    }
+
     private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
         return Problem.builder()
                 .status(status.value())
@@ -118,4 +141,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .title(problemType.getTitle())
                 .detail(detail);
     }
+
+
 }
