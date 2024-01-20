@@ -10,6 +10,7 @@ import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 import tech.bacuri.bacurifood.domain.service.CadastroCozinhaService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -32,7 +33,7 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
+    public ResponseEntity<Cozinha> salvar(@RequestBody @Valid Cozinha cozinha) {
         return new ResponseEntity<>(cadastroCozinhaService.salvar(cozinha), HttpStatus.CREATED);
     }
 

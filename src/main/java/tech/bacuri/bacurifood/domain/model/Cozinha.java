@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+
+import static tech.bacuri.bacurifood.Groups.CadastroRestaurante;
 
 @JsonRootName("cozinha")
 @Getter
@@ -19,12 +22,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Cozinha {
-    @NotNull
+    @NotNull(groups = CadastroRestaurante.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
