@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Getter
@@ -18,4 +20,5 @@ public class Problem {
     private String detail;
 
     private String userMessage;
+    private LocalDateTime timestamp;
 }
