@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Cozinha {
+    @NotNull
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
