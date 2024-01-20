@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tech.bacuri.bacurifood.Groups.CadastroRestaurante;
+import static tech.bacuri.bacurifood.Groups.CozinhaId;
 
 @JsonRootName("cozinha")
 @Getter
@@ -22,7 +22,7 @@ import static tech.bacuri.bacurifood.Groups.CadastroRestaurante;
 @NoArgsConstructor
 @Entity
 public class Cozinha {
-    @NotNull(groups = CadastroRestaurante.class)
+    @NotNull(groups = CozinhaId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

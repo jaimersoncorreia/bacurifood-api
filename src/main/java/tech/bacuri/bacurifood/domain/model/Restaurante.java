@@ -10,12 +10,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tech.bacuri.bacurifood.Groups.CadastroRestaurante;
+import static tech.bacuri.bacurifood.Groups.CozinhaId;
 
 @Getter
 @Setter
@@ -31,16 +32,17 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = CadastroRestaurante.class)
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero(groups = CadastroRestaurante.class)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     @Valid
-    @NotNull(groups = CadastroRestaurante.class)
+    @ConvertGroup(to = CozinhaId.class)
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
