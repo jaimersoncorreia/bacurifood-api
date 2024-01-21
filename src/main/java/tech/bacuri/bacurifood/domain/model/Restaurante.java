@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tech.bacuri.bacurifood.Groups.CozinhaId;
+import static tech.bacuri.bacurifood.core.Groups.CozinhaId;
 
 @Getter
 @Setter
@@ -37,7 +37,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @PositiveOrZero(message = "{TaxaFrete.invalida}")
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 

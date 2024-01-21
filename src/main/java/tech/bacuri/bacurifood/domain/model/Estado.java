@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static tech.bacuri.bacurifood.Groups.EstadoId;
+import static tech.bacuri.bacurifood.core.Groups.EstadoId;
 
 @Setter
 @Getter
