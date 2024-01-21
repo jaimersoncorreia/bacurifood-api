@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import tech.bacuri.bacurifood.core.validation.TaxaFrete;
+import tech.bacuri.bacurifood.core.validation.Multiplo;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -38,7 +38,8 @@ public class Restaurante {
 
     @NotNull
 //    @PositiveOrZero
-    @TaxaFrete
+//    @TaxaFrete
+    @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
