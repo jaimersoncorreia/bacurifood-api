@@ -32,7 +32,7 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Campo nome é obrigatório")
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 

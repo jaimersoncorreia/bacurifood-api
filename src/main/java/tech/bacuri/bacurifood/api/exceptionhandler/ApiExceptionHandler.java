@@ -2,8 +2,11 @@ package tech.bacuri.bacurifood.api.exceptionhandler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +32,14 @@ import static com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import static org.springframework.http.HttpStatus.*;
 import static tech.bacuri.bacurifood.api.exceptionhandler.ProblemType.*;
 
+@AllArgsConstructor
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se " +
             "o problema persistir, entre em contato com o administrador do sistema.";
+
+    private final MessageSource messageSource;
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -155,7 +161,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         List<Problem.Field> fields = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(ApiExceptionHandler::getField)
+                .map(this::getField)
                 .toList();
 
         Problem problem = createProblemBuilder(status, DADOS_INVALIDOS, detail)
@@ -165,10 +171,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private static Problem.Field getField(FieldError fieldError) {
+    private Problem.Field getField(FieldError fieldError) {
+        String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+
         return Problem.Field.builder()
                 .nome(fieldError.getField())
-                .userMessage(fieldError.getDefaultMessage())
+                .userMessage(message)
                 .build();
     }
 
