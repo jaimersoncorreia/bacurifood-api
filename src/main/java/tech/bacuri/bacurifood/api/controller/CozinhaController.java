@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
-import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 import tech.bacuri.bacurifood.domain.service.CadastroCozinhaService;
 
 import javax.validation.Valid;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/cozinhas")
 public class CozinhaController {
 
-    private final CozinhaRepository cozinhaRepository;
     private final CadastroCozinhaService cadastroCozinhaService;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
