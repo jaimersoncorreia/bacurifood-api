@@ -33,13 +33,13 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> salvar(@RequestBody @Valid Cozinha cozinha) {
-        return new ResponseEntity<>(cadastroCozinhaService.salvar(cozinha), HttpStatus.CREATED);
+    public Cozinha salvar(@RequestBody @Valid Cozinha cozinha) {
+        return cadastroCozinhaService.salvar(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.OK)
-    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid Cozinha cozinha) {
         Cozinha cozinhaObtida = cadastroCozinhaService.obter(cozinhaId);
         BeanUtils.copyProperties(cozinha, cozinhaObtida, "id");
 

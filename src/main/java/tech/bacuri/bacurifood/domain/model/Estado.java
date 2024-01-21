@@ -3,6 +3,10 @@ package tech.bacuri.bacurifood.domain.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import static tech.bacuri.bacurifood.Groups.EstadoId;
 
 @Setter
 @Getter
@@ -13,11 +17,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 public class Estado {
+    @NotNull(groups = EstadoId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.domain.model.Estado;
 import tech.bacuri.bacurifood.domain.service.CadastroEstadoService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -26,12 +27,12 @@ public class EstadoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Estado salvar(@RequestBody Estado estado) {
+    public Estado salvar(@RequestBody @Valid Estado estado) {
         return cadastroEstadoService.salvar(estado);
     }
 
     @PutMapping("/{estadoId}")
-    public Estado atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
+    public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
         Estado estadoEncontrado = cadastroEstadoService.obter(estadoId);
         BeanUtils.copyProperties(estado, estadoEncontrado, "id");
 

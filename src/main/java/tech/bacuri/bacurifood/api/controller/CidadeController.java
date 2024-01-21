@@ -10,6 +10,7 @@ import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.service.CadastroCidadeService;
 
+import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Cidade salvar(@RequestBody Cidade cidade) {
+    public Cidade salvar(@RequestBody @Valid Cidade cidade) {
         try {
             return cadastroCidadeService.salvar(cidade);
         } catch (EstadoNaoEncontradoException e) {
@@ -46,7 +47,7 @@ public class CidadeController {
     }
 
     @PutMapping("/{cidadeId}")
-    public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+    public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
         Cidade cidadeEncontrado = cadastroCidadeService.obter(cidadeId);
         BeanUtils.copyProperties(cidade, cidadeEncontrado, "id");
 
