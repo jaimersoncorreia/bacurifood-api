@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tech.bacuri.bacurifood.core.Groups.CozinhaId;
+import static tech.bacuri.bacurifood.core.validation.Groups.CozinhaId;
 
 @JsonRootName("cozinha")
 @Getter
