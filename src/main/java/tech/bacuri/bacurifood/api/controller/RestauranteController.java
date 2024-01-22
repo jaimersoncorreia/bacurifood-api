@@ -9,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.core.validation.ValidacaoException;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
@@ -31,6 +34,7 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 public class RestauranteController {
 
     private final CadastroRestauranteService cadastroRestauranteService;
+    private final SmartValidator smartValidator;
 
     @GetMapping
     public ResponseEntity<List<Restaurante>> listar() {
@@ -73,7 +77,18 @@ public class RestauranteController {
         Restaurante restauranteEncontrado = cadastroRestauranteService.obter(restauranteId);
         merge(restaurante, restauranteEncontrado, request);
 
+        validate(restauranteEncontrado, "restaurante");
+
         return atualizar(restauranteId, restauranteEncontrado);
+    }
+
+    private void validate(Restaurante restauranteEncontrado, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restauranteEncontrado, objectName);
+        smartValidator.validate(restauranteEncontrado, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidacaoException(bindingResult);
+        }
     }
 
     private void merge(Map<String, Object> dadosOrigem,
