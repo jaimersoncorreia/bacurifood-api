@@ -17,7 +17,7 @@ class CadastroCozinhaServiceTest {
     private CadastroCozinhaService cozinhaService;
 
     @Test
-    void deveCadastrarCozinhaComSucesso() {
+    void deveAtribuirId_QuandoCadastrarCozinha_ComDadosCorretos() {
         //cenário
         Cozinha novaCozinha = Cozinha.builder()
                 .nome("Chinesa")
@@ -32,7 +32,7 @@ class CadastroCozinhaServiceTest {
     }
 
     @Test
-    void deveLancarException_Quando_CadastrarCozinha_SemNome() {
+    void deveLancarException_QuandoCadastrarCozinha_SemNome() {
         //cenário
         Cozinha novaCozinha = Cozinha.builder()
                 .nome(null)
@@ -46,7 +46,5 @@ class CadastroCozinhaServiceTest {
 
         //validação
         assertThat(erroEsperado).isNotNull();
-
     }
-
 }
