@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -143,7 +144,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
+                                                                   HttpHeaders headers,
+                                                                   HttpStatus status,
+                                                                   WebRequest request) {
 
         String detail = String.format("O recurso '%s', que você tentou acessar, é inexistente.", ex.getRequestURL());
 
@@ -154,28 +158,35 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
         String detail = String.format("Um ou mais campos estão %s. Faça o preenchimento correto e tente novamente.", "inválidos");
 
 
-        List<Problem.Field> fields = ex.getBindingResult()
-                .getFieldErrors()
+        List<Problem.Object> objects = ex.getBindingResult()
+                .getAllErrors()
                 .stream()
-                .map(this::getField)
+                .map(this::getErrors)
                 .toList();
 
         Problem problem = createProblemBuilder(status, DADOS_INVALIDOS, detail)
                 .userMessage(detail)
-                .fields(fields)
+                .objects(objects)
                 .build();
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private Problem.Field getField(FieldError fieldError) {
-        String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+    private Problem.Object getErrors(ObjectError objectError) {
+        String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
-        return Problem.Field.builder()
-                .nome(fieldError.getField())
+        String name = objectError.getObjectName();
+        if (objectError instanceof FieldError)
+            name = ((FieldError) objectError).getField();
+
+        return Problem.Object.builder()
+                .name(name)
                 .userMessage(message)
                 .build();
     }
