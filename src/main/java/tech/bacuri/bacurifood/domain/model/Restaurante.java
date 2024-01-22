@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import tech.bacuri.bacurifood.core.validation.Multiplo;
+import tech.bacuri.bacurifood.core.validation.ValorZeroIncluiDescricao;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -18,6 +19,9 @@ import java.util.List;
 
 import static tech.bacuri.bacurifood.core.validation.Groups.CozinhaId;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete",
+        descricaoField = "nome",
+        descricaoObrigatoria = "Frete Grátis")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -37,8 +41,6 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-//    @PositiveOrZero
-//    @TaxaFrete
     @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
