@@ -1,12 +1,14 @@
 package tech.bacuri.bacurifood.api.controller;
 
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
+import tech.bacuri.bacurifood.domain.model.Cozinha;
+import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
+import tech.bacuri.bacurifood.util.DatabaseCleaner;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
@@ -23,7 +25,10 @@ class CozinhaControllerIT {
     private int porta;
 
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner cleaner;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     @BeforeEach
     public void setup() {
@@ -31,7 +36,8 @@ class CozinhaControllerIT {
         port = porta;
         basePath = "/cozinhas";
 
-        flyway.migrate();
+        cleaner.clearTables();
+        prepararDados();
     }
 
     @Test
@@ -65,5 +71,12 @@ class CozinhaControllerIT {
                 .post()
                 .then()
                 .statusCode(CREATED.value());
+    }
+
+    private void prepararDados(){
+        cozinhaRepository.save(Cozinha.builder().nome("Chinesa").build());
+        cozinhaRepository.save(Cozinha.builder().nome("Indiana").build());
+        cozinhaRepository.save(Cozinha.builder().nome("Tailandesa").build());
+        cozinhaRepository.save(Cozinha.builder().nome("Brasileira").build());
     }
 }
