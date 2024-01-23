@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.TestPropertySource;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
@@ -15,10 +16,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 class CozinhaControllerIT {
 
     @LocalServerPort
     private int porta;
+
     @Autowired
     private Flyway flyway;
 
@@ -54,7 +57,6 @@ class CozinhaControllerIT {
 
     @Test
     public void deveRetornarStatus201_QuandoCadastrarCozinha() {
-
         given()
                 .body("{\"nome\": \"Chinesa\"}")
                 .contentType(JSON)
