@@ -1,7 +1,9 @@
 package tech.bacuri.bacurifood.api.controller;
 
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -17,12 +19,16 @@ class CozinhaControllerIT {
 
     @LocalServerPort
     private int porta;
+    @Autowired
+    private Flyway flyway;
 
     @BeforeEach
     public void setup() {
         enableLoggingOfRequestAndResponseIfValidationFails();
         port = porta;
         basePath = "/cozinhas";
+
+        flyway.migrate();
     }
 
     @Test
@@ -47,7 +53,7 @@ class CozinhaControllerIT {
     }
 
     @Test
-    public void testedeveRetornarStatus201_QuandoCadastrarCozinha() {
+    public void deveRetornarStatus201_QuandoCadastrarCozinha() {
 
         given()
                 .body("{\"nome\": \"Chinesa\"}")
