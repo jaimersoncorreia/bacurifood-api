@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-class CadastroCozinhaServiceTest {
+class CadastroCozinhaServiceIT {
     @Autowired
     private CadastroCozinhaService cozinhaService;
 
@@ -41,10 +41,8 @@ class CadastroCozinhaServiceTest {
                 .build();
 
         //ação
-        ConstraintViolationException erroEsperado =
-                Assertions.assertThrows(ConstraintViolationException.class, () -> {
-                    cozinhaService.salvar(novaCozinha);
-                });
+        ConstraintViolationException erroEsperado = Assertions
+                .assertThrows(ConstraintViolationException.class, () -> cozinhaService.salvar(novaCozinha));
 
         //validação
         assertThat(erroEsperado).isNotNull();
@@ -56,10 +54,8 @@ class CadastroCozinhaServiceTest {
         Long cozinhaId = 1L;
 
         //ação
-        EntidadeEmUsoException erroEsperado =
-                Assertions.assertThrows(EntidadeEmUsoException.class, () -> {
-                    cozinhaService.remover(cozinhaId);
-                });
+        EntidadeEmUsoException erroEsperado = Assertions
+                .assertThrows(EntidadeEmUsoException.class, () -> cozinhaService.remover(cozinhaId));
 
         //validação
         assertThat(erroEsperado).isNotNull();
@@ -71,10 +67,8 @@ class CadastroCozinhaServiceTest {
         Long cozinhaId = 100L;
 
         //ação
-        CozinhaNaoEncontradaException erroEsperado =
-                Assertions.assertThrows(CozinhaNaoEncontradaException.class, () -> {
-                    cozinhaService.remover(cozinhaId);
-                });
+        CozinhaNaoEncontradaException erroEsperado = Assertions
+                .assertThrows(CozinhaNaoEncontradaException.class, () -> cozinhaService.remover(cozinhaId));
 
         //validação
         assertThat(erroEsperado).isNotNull();

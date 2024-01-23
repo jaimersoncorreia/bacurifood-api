@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
-class BacurifoodApiApplicationTests {
+class BacurifoodApiApplicationIT {
     @Test
     void contextLoads() {
         assertFalse(false);
