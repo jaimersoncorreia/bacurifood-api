@@ -1,0 +1,7 @@
+{
+  "nome": "Tuk Tuk Comida Indiana",
+  "taxaFrete": 50.00,
+  "cozinha": {
+    "id": 1
+  }
+}
