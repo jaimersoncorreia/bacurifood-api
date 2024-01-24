@@ -9,6 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 import tech.bacuri.bacurifood.util.DatabaseCleaner;
+import tech.bacuri.bacurifood.util.ResourceUtils;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.*;
 @TestPropertySource("/application-test.properties")
 class CozinhaControllerIT {
 
+    public static final int COZINHA_ID_INEXISTENTE = 2000;
     @LocalServerPort
     private int porta;
 
@@ -28,6 +30,10 @@ class CozinhaControllerIT {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
+    private int totalDeCozinhas;
+    private Cozinha indiana;
+    private String jsonCorretoCozinhaChinesa;
+
     @BeforeEach
     public void setup() {
         enableLoggingOfRequestAndResponseIfValidationFails();
@@ -36,6 +42,7 @@ class CozinhaControllerIT {
 
         cleaner.clearTables();
         prepararDados();
+        jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource("/json/correto/cozinha-chinesa.json");
     }
 
     @Test
@@ -49,20 +56,20 @@ class CozinhaControllerIT {
     }
 
     @Test
-    public void deveConter4Cozinhas_QuandoConsultarCozinha() {
+    public void deveConterTotalDeCozinhas_QuandoConsultarCozinha() {
         given()
                 .accept(JSON)
                 .when()
                 .get()
                 .then()
-                .body("", hasSize(4))
+                .body("", hasSize(this.totalDeCozinhas))
                 .body("nome", hasItems("Indiana", "Tailandesa"));
     }
 
     @Test
     public void deveRetornarStatus201_QuandoCadastrarCozinha() {
         given()
-                .body("{\"nome\": \"Chinesa\"}")
+                .body(this.jsonCorretoCozinhaChinesa)
                 .contentType(JSON)
                 .accept(JSON)
                 .when()
@@ -74,19 +81,19 @@ class CozinhaControllerIT {
     @Test
     public void deveRetornarRespostaEStatusCorreto_QuandoConsultarCozinhaExistente() {
         given()
-                .pathParam("cozinhaId", 2)
+                .pathParam("cozinhaId", this.indiana.getId())
                 .accept(JSON)
                 .when()
                 .get("/{cozinhaId}")
                 .then()
                 .statusCode(OK.value())
-                .body("nome", equalTo("Indiana"));
+                .body("nome", equalTo(this.indiana.getNome()));
     }
 
     @Test
     public void deveRetornarRespostaEStatus404_QuandoConsultarCozinhaInexistente() {
         given()
-                .pathParam("cozinhaId", 20)
+                .pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
                 .accept(JSON)
                 .when()
                 .get("/{cozinhaId}")
@@ -95,9 +102,11 @@ class CozinhaControllerIT {
     }
 
     private void prepararDados() {
-        cozinhaRepository.save(Cozinha.builder().nome("Chinesa").build());
-        cozinhaRepository.save(Cozinha.builder().nome("Indiana").build());
-        cozinhaRepository.save(Cozinha.builder().nome("Tailandesa").build());
-        cozinhaRepository.save(Cozinha.builder().nome("Brasileira").build());
+        this.cozinhaRepository.save(Cozinha.builder().nome("Chinesa").build());
+        this.indiana = this.cozinhaRepository.save(Cozinha.builder().nome("Indiana").build());
+        this.cozinhaRepository.save(Cozinha.builder().nome("Tailandesa").build());
+        this.cozinhaRepository.save(Cozinha.builder().nome("Brasileira").build());
+
+        this.totalDeCozinhas = (int) cozinhaRepository.count();
     }
 }
