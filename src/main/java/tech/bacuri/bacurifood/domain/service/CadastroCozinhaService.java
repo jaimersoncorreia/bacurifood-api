@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
@@ -19,6 +20,7 @@ public class CadastroCozinhaService {
 
     private final CozinhaRepository cozinhaRepository;
 
+    @Transactional
     public Cozinha salvar(Cozinha cozinha) {
         return cozinhaRepository.save(cozinha);
     }
@@ -32,6 +34,7 @@ public class CadastroCozinhaService {
                 .orElseThrow(() -> new CozinhaNaoEncontradaException(cozinhaId));
     }
 
+    @Transactional
     public void remover(Long cozinhaId) {
         try {
             cozinhaRepository.deleteById(cozinhaId);
@@ -41,7 +44,5 @@ public class CadastroCozinhaService {
             String msg = String.format(MSG_COZINHA_EM_USO, cozinhaId);
             throw new EntidadeEmUsoException(msg);
         }
-
-
     }
 }

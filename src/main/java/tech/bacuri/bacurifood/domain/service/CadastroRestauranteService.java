@@ -2,6 +2,7 @@ package tech.bacuri.bacurifood.domain.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.RestauranteNaoEncontradoException;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
@@ -12,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class CadastroRestauranteService {
-    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe cadastro de restaurante com o código %d";
     private final RestauranteRepository restauranteRepository;
     private CadastroCozinhaService cadastroCozinha;
 
@@ -26,6 +26,7 @@ public class CadastroRestauranteService {
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
     }
 
+    @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Cozinha cozinha = cadastroCozinha.obter(restaurante.getCozinha().getId());
         restaurante.setCozinha(cozinha);
@@ -33,6 +34,7 @@ public class CadastroRestauranteService {
         return restauranteRepository.save(restaurante);
     }
 
+    @Transactional
     public Restaurante atualizar(Restaurante restaurante) {
         return salvar(restaurante);
     }

@@ -3,6 +3,7 @@ package tech.bacuri.bacurifood.domain.service;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.CidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
@@ -21,6 +22,7 @@ public class CadastroCidadeService {
         return cidadeRepository.findAll();
     }
 
+    @Transactional
     public Cidade salvar(Cidade cidade) {
         cidade.setEstado(cadastroEstado.obter(cidade.getEstado().getId()));
 
@@ -32,6 +34,7 @@ public class CadastroCidadeService {
                 .orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
     }
 
+    @Transactional
     public void remover(Long cidadeId) {
         try {
             cidadeRepository.delete(obter(cidadeId));
