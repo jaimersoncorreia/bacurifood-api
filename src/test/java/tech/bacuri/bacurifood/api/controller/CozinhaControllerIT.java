@@ -12,10 +12,8 @@ import tech.bacuri.bacurifood.util.DatabaseCleaner;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
@@ -73,7 +71,30 @@ class CozinhaControllerIT {
                 .statusCode(CREATED.value());
     }
 
-    private void prepararDados(){
+    @Test
+    public void deveRetornarRespostaEStatusCorreto_QuandoConsultarCozinhaExistente() {
+        given()
+                .pathParam("cozinhaId", 2)
+                .accept(JSON)
+                .when()
+                .get("/{cozinhaId}")
+                .then()
+                .statusCode(OK.value())
+                .body("nome", equalTo("Indiana"));
+    }
+
+    @Test
+    public void deveRetornarRespostaEStatus404_QuandoConsultarCozinhaInexistente() {
+        given()
+                .pathParam("cozinhaId", 20)
+                .accept(JSON)
+                .when()
+                .get("/{cozinhaId}")
+                .then()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    private void prepararDados() {
         cozinhaRepository.save(Cozinha.builder().nome("Chinesa").build());
         cozinhaRepository.save(Cozinha.builder().nome("Indiana").build());
         cozinhaRepository.save(Cozinha.builder().nome("Tailandesa").build());
