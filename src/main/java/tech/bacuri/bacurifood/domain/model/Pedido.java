@@ -1,6 +1,5 @@
 package tech.bacuri.bacurifood.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,7 +32,6 @@ public class Pedido {
     @Column(nullable = false)
     private BigDecimal valorTotal;
 
-    @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private LocalDateTime dataCriacao;
@@ -62,7 +60,6 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens = new ArrayList<>();
 
-    @JsonIgnore
     @Embedded
     private Endereco enderecoEntrega;
 
