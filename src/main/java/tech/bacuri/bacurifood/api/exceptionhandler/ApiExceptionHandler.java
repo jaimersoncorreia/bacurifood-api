@@ -26,7 +26,7 @@ import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -125,7 +125,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .status(status.value())
                     .title((String) body)
                     .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now())
                     .build();
 
         if (Objects.isNull(body))
@@ -133,7 +133,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .status(status.value())
                     .title((status.getReasonPhrase()))
                     .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now())
                     .build();
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
@@ -259,6 +259,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(problemType.getUri())
                 .title(problemType.getTitle())
                 .detail(detail)
-                .timestamp(LocalDateTime.now());
+                .timestamp(OffsetDateTime.now());
     }
 }

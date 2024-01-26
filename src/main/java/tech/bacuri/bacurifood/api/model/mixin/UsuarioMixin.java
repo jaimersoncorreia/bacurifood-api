@@ -3,7 +3,7 @@ package tech.bacuri.bacurifood.api.model.mixin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import tech.bacuri.bacurifood.domain.model.Grupo;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class UsuarioMixin {
     private String senha;
 
     @JsonIgnore
-    private LocalDateTime dataCadastro;
+    private OffsetDateTime dataCadastro;
 
     @JsonIgnore
     private List<Grupo> grupos = new ArrayList<>();

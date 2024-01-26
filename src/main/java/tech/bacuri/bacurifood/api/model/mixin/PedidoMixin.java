@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import tech.bacuri.bacurifood.domain.model.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +18,13 @@ public class PedidoMixin {
     private BigDecimal valorTotal;
 
     @JsonIgnore
-    private LocalDateTime dataCriacao;
+    private OffsetDateTime dataCriacao;
 
-    private LocalDateTime dataConfirmacao;
+    private OffsetDateTime dataConfirmacao;
 
-    private LocalDateTime dataCancelamento;
+    private OffsetDateTime dataCancelamento;
 
-    private LocalDateTime dataEntrega;
+    private OffsetDateTime dataEntrega;
 
     private FormaPagamento formaPagamento;
 
