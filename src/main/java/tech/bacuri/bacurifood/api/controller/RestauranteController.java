@@ -9,6 +9,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.api.assembler.RestauranteInputDisassembler;
 import tech.bacuri.bacurifood.api.assembler.RestauranteModelAssembler;
 import tech.bacuri.bacurifood.api.model.RestauranteModel;
 import tech.bacuri.bacurifood.api.model.input.CozinhaIdInput;
@@ -16,7 +17,6 @@ import tech.bacuri.bacurifood.api.model.input.RestauranteInput;
 import tech.bacuri.bacurifood.core.validation.ValidacaoException;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
-import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
 
@@ -40,6 +40,7 @@ public class RestauranteController {
     private final CadastroRestauranteService cadastroRestauranteService;
     private final SmartValidator smartValidator;
     private final RestauranteModelAssembler assembler;
+    private final RestauranteInputDisassembler disassembler;
 
     @GetMapping
     public List<RestauranteModel> listar() {
@@ -56,7 +57,7 @@ public class RestauranteController {
     @ResponseStatus(CREATED)
     public RestauranteModel salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            Restaurante restaurante = toEntity(restauranteInput);
+            Restaurante restaurante = disassembler.toEntity(restauranteInput);
             return assembler.toModel(cadastroRestauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
@@ -68,7 +69,7 @@ public class RestauranteController {
         Restaurante restauranteObtido;
         restauranteObtido = cadastroRestauranteService.obter(restauranteId);
 
-        copyProperties(toEntity(restauranteInput), restauranteObtido,
+        copyProperties(disassembler.toEntity(restauranteInput), restauranteObtido,
                 "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
         try {
             return assembler.toModel(cadastroRestauranteService.atualizar(restauranteObtido));
@@ -128,14 +129,5 @@ public class RestauranteController {
                     ExceptionUtils.getRootCause(e),
                     new ServletServerHttpRequest(request));
         }
-    }
-
-    public Restaurante toEntity(RestauranteInput restauranteInput) {
-        Cozinha cozinha = Cozinha.builder().id(restauranteInput.getCozinha().getId()).build();
-        return Restaurante.builder()
-                .nome(restauranteInput.getNome())
-                .taxaFrete(restauranteInput.getTaxaFrete())
-                .cozinha(cozinha)
-                .build();
     }
 }
