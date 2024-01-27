@@ -9,7 +9,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
-import tech.bacuri.bacurifood.api.model.CozinhaModel;
+import tech.bacuri.bacurifood.api.assembler.RestauranteModelAssembler;
 import tech.bacuri.bacurifood.api.model.RestauranteModel;
 import tech.bacuri.bacurifood.api.model.input.CozinhaIdInput;
 import tech.bacuri.bacurifood.api.model.input.RestauranteInput;
@@ -39,16 +39,17 @@ public class RestauranteController {
 
     private final CadastroRestauranteService cadastroRestauranteService;
     private final SmartValidator smartValidator;
+    private final RestauranteModelAssembler assembler;
 
     @GetMapping
     public List<RestauranteModel> listar() {
         List<Restaurante> restaurantes = cadastroRestauranteService.listar();
-        return toCollectionModel(restaurantes);
+        return assembler.toCollectionModel(restaurantes);
     }
 
     @GetMapping("/{restauranteId}")
     public RestauranteModel obter(@PathVariable Long restauranteId) {
-        return toModel(cadastroRestauranteService.obter(restauranteId));
+        return assembler.toModel(cadastroRestauranteService.obter(restauranteId));
     }
 
     @PostMapping
@@ -56,7 +57,7 @@ public class RestauranteController {
     public RestauranteModel salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restaurante = toEntity(restauranteInput);
-            return toModel(cadastroRestauranteService.salvar(restaurante));
+            return assembler.toModel(cadastroRestauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -70,7 +71,7 @@ public class RestauranteController {
         copyProperties(toEntity(restauranteInput), restauranteObtido,
                 "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
         try {
-            return toModel(cadastroRestauranteService.atualizar(restauranteObtido));
+            return assembler.toModel(cadastroRestauranteService.atualizar(restauranteObtido));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -129,24 +130,7 @@ public class RestauranteController {
         }
     }
 
-    private RestauranteModel toModel(Restaurante restaurante) {
-        CozinhaModel cozinhaModel = CozinhaModel.builder()
-                .id(restaurante.getCozinha().getId())
-                .nome(restaurante.getNome()).build();
-
-        return RestauranteModel.builder()
-                .id(restaurante.getId())
-                .nome(restaurante.getNome())
-                .taxaFrete(restaurante.getTaxaFrete())
-                .cozinha(cozinhaModel)
-                .build();
-    }
-
-    private List<RestauranteModel> toCollectionModel(List<Restaurante> restaurantes) {
-        return restaurantes.stream().map(this::toModel).toList();
-    }
-
-    private Restaurante toEntity(RestauranteInput restauranteInput) {
+    public Restaurante toEntity(RestauranteInput restauranteInput) {
         Cozinha cozinha = Cozinha.builder().id(restauranteInput.getCozinha().getId()).build();
         return Restaurante.builder()
                 .nome(restauranteInput.getNome())
