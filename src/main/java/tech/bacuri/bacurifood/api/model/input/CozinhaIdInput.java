@@ -6,9 +6,6 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class CozinhaIdInput {
     @NotNull
     private Long id;

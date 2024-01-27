@@ -93,7 +93,7 @@ class RestauranteControllerIT {
     }
 
     @Test
-    public void deveRetornarBAD_REQUEST_QuandoCadastrarRestauranteComFreteGratisSemOnomeFreteGratis() {
+    public void deveRetornarBAD_REQUEST_QuandoCadastrarRestauranteComFreteNegativo() {
         given()
                 .body(restauranteLancarBadRequest)
                 .contentType(JSON)

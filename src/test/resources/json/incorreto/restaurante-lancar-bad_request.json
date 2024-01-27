@@ -1,6 +1,6 @@
 {
   "nome": "Tuk Tuk Comida Indiana",
-  "taxaFrete": 0.00,
+  "taxaFrete": -10.00,
   "cozinha": {
     "id": 1
   }

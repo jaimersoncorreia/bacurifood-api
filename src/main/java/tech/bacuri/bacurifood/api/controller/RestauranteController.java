@@ -6,15 +6,11 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.api.assembler.RestauranteInputDisassembler;
 import tech.bacuri.bacurifood.api.assembler.RestauranteModelAssembler;
 import tech.bacuri.bacurifood.api.model.RestauranteModel;
-import tech.bacuri.bacurifood.api.model.input.CozinhaIdInput;
 import tech.bacuri.bacurifood.api.model.input.RestauranteInput;
-import tech.bacuri.bacurifood.core.validation.ValidacaoException;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
@@ -38,7 +34,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class RestauranteController {
 
     private final CadastroRestauranteService cadastroRestauranteService;
-    private final SmartValidator smartValidator;
     private final RestauranteModelAssembler assembler;
     private final RestauranteInputDisassembler disassembler;
 
@@ -75,36 +70,6 @@ public class RestauranteController {
             return assembler.toModel(cadastroRestauranteService.atualizar(restauranteObtido));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
-        }
-    }
-
-    @PatchMapping("/{restauranteId}")
-    public RestauranteModel atualizarParcial(@PathVariable Long restauranteId,
-                                             @RequestBody Map<String, Object> restaurante,
-                                             HttpServletRequest request) {
-        Restaurante restauranteEncontrado = cadastroRestauranteService.obter(restauranteId);
-        merge(restaurante, restauranteEncontrado, request);
-
-        validate(restauranteEncontrado, "restaurante");
-
-        return atualizar(restauranteId, toInputModel(restauranteEncontrado));
-    }
-
-    private RestauranteInput toInputModel(Restaurante restaurante) {
-        CozinhaIdInput cozinha = CozinhaIdInput.builder().id(restaurante.getCozinha().getId()).build();
-        return RestauranteInput.builder()
-                .nome(restaurante.getNome())
-                .taxaFrete(restaurante.getTaxaFrete())
-                .cozinha(cozinha)
-                .build();
-    }
-
-    private void validate(Restaurante restauranteEncontrado, String objectName) {
-        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restauranteEncontrado, objectName);
-        smartValidator.validate(restauranteEncontrado, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            throw new ValidacaoException(bindingResult);
         }
     }
 

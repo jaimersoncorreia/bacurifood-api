@@ -1,6 +1,5 @@
 package tech.bacuri.bacurifood.api.model.input;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,6 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Builder
 public class RestauranteInput {
     @NotBlank
     private String nome;
