@@ -8,14 +8,7 @@ import java.math.BigDecimal;
 @Setter
 public class RestauranteModel {
     private Long id;
-
     private String nome;
-
-    private BigDecimal taxaFrete;
-
+    private BigDecimal precoFrete;
     private CozinhaModel cozinha;
-
-    private String nomeCozinha;
-
-    private Long CozinhaId;
 }
