@@ -5,11 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
-import static tech.bacuri.bacurifood.core.validation.Groups.CozinhaId;
 
 @JsonRootName("cozinha")
 @Getter
@@ -21,7 +18,6 @@ import static tech.bacuri.bacurifood.core.validation.Groups.CozinhaId;
 @NoArgsConstructor
 @Entity
 public class Cozinha {
-    @NotNull(groups = CozinhaId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

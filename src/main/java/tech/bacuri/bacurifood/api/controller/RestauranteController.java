@@ -3,7 +3,6 @@ package tech.bacuri.bacurifood.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -12,9 +11,12 @@ import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 import tech.bacuri.bacurifood.api.model.CozinhaModel;
 import tech.bacuri.bacurifood.api.model.RestauranteModel;
+import tech.bacuri.bacurifood.api.model.input.CozinhaIdInput;
+import tech.bacuri.bacurifood.api.model.input.RestauranteInput;
 import tech.bacuri.bacurifood.core.validation.ValidacaoException;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
+import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.service.CadastroRestauranteService;
 
@@ -27,6 +29,7 @@ import java.util.Objects;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @AllArgsConstructor
@@ -50,8 +53,9 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public RestauranteModel salvar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteModel salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
+            Restaurante restaurante = toEntity(restauranteInput);
             return toModel(cadastroRestauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
@@ -59,11 +63,11 @@ public class RestauranteController {
     }
 
     @PutMapping("/{restauranteId}")
-    public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid Restaurante restaurante) {
+    public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
         Restaurante restauranteObtido;
         restauranteObtido = cadastroRestauranteService.obter(restauranteId);
 
-        BeanUtils.copyProperties(restaurante, restauranteObtido,
+        copyProperties(toEntity(restauranteInput), restauranteObtido,
                 "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
         try {
             return toModel(cadastroRestauranteService.atualizar(restauranteObtido));
@@ -74,14 +78,23 @@ public class RestauranteController {
 
     @PatchMapping("/{restauranteId}")
     public RestauranteModel atualizarParcial(@PathVariable Long restauranteId,
-                                        @RequestBody Map<String, Object> restaurante,
-                                        HttpServletRequest request) {
+                                             @RequestBody Map<String, Object> restaurante,
+                                             HttpServletRequest request) {
         Restaurante restauranteEncontrado = cadastroRestauranteService.obter(restauranteId);
         merge(restaurante, restauranteEncontrado, request);
 
         validate(restauranteEncontrado, "restaurante");
 
-        return atualizar(restauranteId, restauranteEncontrado);
+        return atualizar(restauranteId, toInputModel(restauranteEncontrado));
+    }
+
+    private RestauranteInput toInputModel(Restaurante restaurante) {
+        CozinhaIdInput cozinha = CozinhaIdInput.builder().id(restaurante.getCozinha().getId()).build();
+        return RestauranteInput.builder()
+                .nome(restaurante.getNome())
+                .taxaFrete(restaurante.getTaxaFrete())
+                .cozinha(cozinha)
+                .build();
     }
 
     private void validate(Restaurante restauranteEncontrado, String objectName) {
@@ -131,5 +144,14 @@ public class RestauranteController {
 
     private List<RestauranteModel> toCollectionModel(List<Restaurante> restaurantes) {
         return restaurantes.stream().map(this::toModel).toList();
+    }
+
+    private Restaurante toEntity(RestauranteInput restauranteInput) {
+        Cozinha cozinha = Cozinha.builder().id(restauranteInput.getCozinha().getId()).build();
+        return Restaurante.builder()
+                .nome(restauranteInput.getNome())
+                .taxaFrete(restauranteInput.getTaxaFrete())
+                .cozinha(cozinha)
+                .build();
     }
 }
