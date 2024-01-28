@@ -1,9 +1,11 @@
 package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.api.assembler.EstadoInputDisassembler;
+import tech.bacuri.bacurifood.api.assembler.EstadoModelAssembler;
+import tech.bacuri.bacurifood.api.model.EstadoModel;
+import tech.bacuri.bacurifood.api.model.input.EstadoInput;
 import tech.bacuri.bacurifood.domain.model.Estado;
 import tech.bacuri.bacurifood.domain.service.CadastroEstadoService;
 
@@ -19,24 +21,26 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 public class EstadoController {
 
     private final CadastroEstadoService cadastroEstadoService;
+    private final EstadoModelAssembler estadoModelAssembler;
+    private final EstadoInputDisassembler estadoInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<Estado>> listar() {
-        return ResponseEntity.ok(cadastroEstadoService.listar());
+    public List<EstadoModel> listar() {
+        return estadoModelAssembler.toCollectionModel(cadastroEstadoService.listar());
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Estado salvar(@RequestBody @Valid Estado estado) {
-        return cadastroEstadoService.salvar(estado);
+    public EstadoModel salvar(@RequestBody @Valid EstadoInput estadoInput) {
+        Estado estado = estadoInputDisassembler.toEntity(estadoInput);
+        return estadoModelAssembler.toModel(cadastroEstadoService.salvar(estado));
     }
 
     @PutMapping("/{estadoId}")
-    public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
+    public EstadoModel atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoEncontrado = cadastroEstadoService.obter(estadoId);
-        BeanUtils.copyProperties(estado, estadoEncontrado, "id");
-
-        return cadastroEstadoService.salvar(estadoEncontrado);
+        estadoInputDisassembler.copyToEntity(estadoInput, estadoEncontrado);
+        return estadoModelAssembler.toModel(cadastroEstadoService.salvar(estadoEncontrado));
     }
 
     @DeleteMapping("/{estadoId}")

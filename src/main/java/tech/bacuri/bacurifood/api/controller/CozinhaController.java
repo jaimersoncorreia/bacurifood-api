@@ -1,11 +1,12 @@
 package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.bacuri.bacurifood.api.assembler.CozinhaInputDisassembler;
+import tech.bacuri.bacurifood.api.assembler.CozinhaModelAssembler;
+import tech.bacuri.bacurifood.api.model.CozinhaModel;
+import tech.bacuri.bacurifood.api.model.input.CozinhaInput;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.service.CadastroCozinhaService;
 
@@ -18,31 +19,31 @@ import java.util.List;
 public class CozinhaController {
 
     private final CadastroCozinhaService cadastroCozinhaService;
+    private final CozinhaModelAssembler cozinhaModelAssembler;
+    private final CozinhaInputDisassembler cozinhaInputDisassembler;
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<Cozinha>> listar() {
-        return ResponseEntity.ok(cadastroCozinhaService.listar());
+    @GetMapping
+    public List<CozinhaModel> listar() {
+        return cozinhaModelAssembler.toCollectionModel(cadastroCozinhaService.listar());
     }
 
     @GetMapping("/{cozinhaId}")
-    @ResponseStatus(HttpStatus.OK)
-    public Cozinha obter(@PathVariable Long cozinhaId) {
-        return cadastroCozinhaService.obter(cozinhaId);
+    public CozinhaModel obter(@PathVariable Long cozinhaId) {
+        return cozinhaModelAssembler.toModel(cadastroCozinhaService.obter(cozinhaId));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha salvar(@RequestBody @Valid Cozinha cozinha) {
-        return cadastroCozinhaService.salvar(cozinha);
+    public CozinhaModel salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+        Cozinha cozinha = cozinhaInputDisassembler.toEntity(cozinhaInput);
+        return cozinhaModelAssembler.toModel(cadastroCozinhaService.salvar(cozinha));
     }
 
     @PutMapping("/{cozinhaId}")
-    @ResponseStatus(HttpStatus.OK)
-    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid Cozinha cozinha) {
+    public CozinhaModel atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaObtida = cadastroCozinhaService.obter(cozinhaId);
-        BeanUtils.copyProperties(cozinha, cozinhaObtida, "id");
-
-        return cadastroCozinhaService.salvar(cozinhaObtida);
+        cozinhaInputDisassembler.copyToEntity(cozinhaInput, cozinhaObtida);
+        return cozinhaModelAssembler.toModel(cadastroCozinhaService.salvar(cozinhaObtida));
     }
 
     @DeleteMapping("/{cozinhaId}")

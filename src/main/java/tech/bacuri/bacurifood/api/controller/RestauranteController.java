@@ -22,18 +22,18 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class RestauranteController {
 
     private final CadastroRestauranteService cadastroRestauranteService;
-    private final RestauranteModelAssembler assembler;
+    private final RestauranteModelAssembler restauranteModelAssembler;
     private final RestauranteInputDisassembler restauranteInputDisassembler;
 
     @GetMapping
     public List<RestauranteModel> listar() {
         List<Restaurante> restaurantes = cadastroRestauranteService.listar();
-        return assembler.toCollectionModel(restaurantes);
+        return restauranteModelAssembler.toCollectionModel(restaurantes);
     }
 
     @GetMapping("/{restauranteId}")
     public RestauranteModel obter(@PathVariable Long restauranteId) {
-        return assembler.toModel(cadastroRestauranteService.obter(restauranteId));
+        return restauranteModelAssembler.toModel(cadastroRestauranteService.obter(restauranteId));
     }
 
     @PostMapping
@@ -41,7 +41,7 @@ public class RestauranteController {
     public RestauranteModel salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restaurante = restauranteInputDisassembler.toEntity(restauranteInput);
-            return assembler.toModel(cadastroRestauranteService.salvar(restaurante));
+            return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -52,7 +52,7 @@ public class RestauranteController {
         try {
             Restaurante restauranteObtido = cadastroRestauranteService.obter(restauranteId);
             restauranteInputDisassembler.copyToEntity(restauranteInput, restauranteObtido);
-            return assembler.toModel(cadastroRestauranteService.atualizar(restauranteObtido));
+            return restauranteModelAssembler.toModel(cadastroRestauranteService.atualizar(restauranteObtido));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
