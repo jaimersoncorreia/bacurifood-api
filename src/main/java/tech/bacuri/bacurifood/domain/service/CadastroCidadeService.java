@@ -38,6 +38,7 @@ public class CadastroCidadeService {
     public void remover(Long cidadeId) {
         try {
             cidadeRepository.delete(obter(cidadeId));
+            cidadeRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_CIDADE_EM_USO, cidadeId));
         }

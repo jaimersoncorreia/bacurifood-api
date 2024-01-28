@@ -30,7 +30,6 @@ public class CadastroRestauranteService {
     public Restaurante salvar(Restaurante restaurante) {
         Cozinha cozinha = cadastroCozinha.obter(restaurante.getCozinha().getId());
         restaurante.setCozinha(cozinha);
-
         return restauranteRepository.save(restaurante);
     }
 
