@@ -3,7 +3,7 @@ package tech.bacuri.bacurifood.domain.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import tech.bacuri.bacurifood.BacurifoodApiApplicationIT;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
@@ -12,9 +12,7 @@ import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@SpringBootTest
-class CadastroCozinhaServiceIT {
+class CadastroCozinhaServiceIT extends BacurifoodApiApplicationIT {
     @Autowired
     private CadastroCozinhaService cozinhaService;
 

@@ -3,9 +3,7 @@ package tech.bacuri.bacurifood.api.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.TestPropertySource;
+import tech.bacuri.bacurifood.BacurifoodApiApplicationIT;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
 import tech.bacuri.bacurifood.util.DatabaseCleaner;
@@ -16,13 +14,9 @@ import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
-class CozinhaControllerIT {
+class CozinhaControllerIT extends BacurifoodApiApplicationIT {
 
     public static final int COZINHA_ID_INEXISTENTE = 2000;
-    @LocalServerPort
-    private int porta;
 
     @Autowired
     private DatabaseCleaner cleaner;
@@ -37,7 +31,7 @@ class CozinhaControllerIT {
     @BeforeEach
     public void setup() {
         enableLoggingOfRequestAndResponseIfValidationFails();
-        port = porta;
+        port = getPorta();
         basePath = "/cozinhas";
 
         cleaner.clearTables();

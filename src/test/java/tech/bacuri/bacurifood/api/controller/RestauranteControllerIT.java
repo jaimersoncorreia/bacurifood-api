@@ -3,9 +3,7 @@ package tech.bacuri.bacurifood.api.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.TestPropertySource;
+import tech.bacuri.bacurifood.BacurifoodApiApplicationIT;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.repository.CozinhaRepository;
@@ -17,16 +15,14 @@ import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpStatus.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
-class RestauranteControllerIT {
+
+class RestauranteControllerIT extends BacurifoodApiApplicationIT {
 
     private static final Long RESTAURANTE_ID_INEXISTENTE = 200L;
-    @LocalServerPort
-    private int porta;
 
     @Autowired
     private DatabaseCleaner cleaner;
@@ -46,7 +42,7 @@ class RestauranteControllerIT {
     @BeforeEach
     public void setup() {
         enableLoggingOfRequestAndResponseIfValidationFails();
-        port = porta;
+        port = getPorta();
         basePath = "/restaurantes";
 
         cleaner.clearTables();
