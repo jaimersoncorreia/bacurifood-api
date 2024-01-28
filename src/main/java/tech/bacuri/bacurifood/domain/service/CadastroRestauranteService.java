@@ -34,6 +34,16 @@ public class CadastroRestauranteService {
     }
 
     @Transactional
+    public void ativar(Long restauranteId) {
+        obter(restauranteId).ativar();
+    }
+
+    @Transactional
+    public void inativar(Long restauranteId) {
+        obter(restauranteId).inativar();
+    }
+
+    @Transactional
     public Restaurante atualizar(Restaurante restaurante) {
         return salvar(restaurante);
     }
