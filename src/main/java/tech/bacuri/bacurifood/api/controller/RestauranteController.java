@@ -6,6 +6,7 @@ import tech.bacuri.bacurifood.api.assembler.RestauranteInputDisassembler;
 import tech.bacuri.bacurifood.api.assembler.RestauranteModelAssembler;
 import tech.bacuri.bacurifood.api.model.RestauranteModel;
 import tech.bacuri.bacurifood.api.model.input.RestauranteInput;
+import tech.bacuri.bacurifood.domain.exception.CidadeNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.CozinhaNaoEncontradaException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
@@ -43,18 +44,19 @@ public class RestauranteController {
         try {
             Restaurante restaurante = restauranteInputDisassembler.toEntity(restauranteInput);
             return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restaurante));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{restauranteId}")
-    public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
+    public RestauranteModel atualizar(@PathVariable Long restauranteId,
+                                      @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restauranteObtido = cadastroRestauranteService.obter(restauranteId);
             restauranteInputDisassembler.copyToEntity(restauranteInput, restauranteObtido);
             return restauranteModelAssembler.toModel(cadastroRestauranteService.atualizar(restauranteObtido));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
