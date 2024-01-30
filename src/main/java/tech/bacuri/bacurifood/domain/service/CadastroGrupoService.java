@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class CadastroGrupoService {
-    private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removida, pois está em uso";
+        private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removida, pois está em uso";
     private final GrupoRepository grupoRepository;
 
     public List<Grupo> listar() {
