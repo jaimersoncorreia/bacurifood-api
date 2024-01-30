@@ -12,6 +12,7 @@ import tech.bacuri.bacurifood.domain.model.Usuario;
 import tech.bacuri.bacurifood.domain.repository.UsuarioRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -31,6 +32,11 @@ public class CadastroUsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
+        usuarioRepository.detach(usuario);
+        Optional<Usuario> byEmail = usuarioRepository.findByEmail(usuario.getEmail());
+        if (byEmail.isPresent() && !byEmail.get().equals(usuario)) {
+            throw new NegocioException(String.format("Já existe um usuário cadastrado com o e-mail %s", usuario.getEmail()));
+        }
         return usuarioRepository.save(usuario);
     }
 
