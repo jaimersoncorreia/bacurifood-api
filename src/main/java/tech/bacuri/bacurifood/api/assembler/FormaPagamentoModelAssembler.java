@@ -6,15 +6,16 @@ import org.springframework.stereotype.Component;
 import tech.bacuri.bacurifood.api.model.FormaPagamentoModel;
 import tech.bacuri.bacurifood.domain.model.FormaPagamento;
 
+import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
 @Component
-public class FormaPagamentoAssembler {
+public class FormaPagamentoModelAssembler {
 
     private final ModelMapper mapper;
 
-    public List<FormaPagamentoModel> toCollectionModel(List<FormaPagamento> formasPagamento) {
+    public List<FormaPagamentoModel> toCollectionModel(Collection<FormaPagamento> formasPagamento) {
         return formasPagamento.stream().map(this::toModel).toList();
     }
 

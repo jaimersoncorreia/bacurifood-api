@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.RestauranteNaoEncontradoException;
 import tech.bacuri.bacurifood.domain.model.Cidade;
 import tech.bacuri.bacurifood.domain.model.Cozinha;
+import tech.bacuri.bacurifood.domain.model.FormaPagamento;
 import tech.bacuri.bacurifood.domain.model.Restaurante;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
 
@@ -18,6 +19,7 @@ public class CadastroRestauranteService {
     private final RestauranteRepository restauranteRepository;
     private final CadastroCozinhaService cadastroCozinha;
     private final CadastroCidadeService cadastroCidade;
+    private final CadastroFormaPagamentoService formaPagamentoService;
 
     public List<Restaurante> listar() {
         return restauranteRepository.findAll();
@@ -49,6 +51,20 @@ public class CadastroRestauranteService {
     @Transactional
     public void inativar(Long restauranteId) {
         obter(restauranteId).inativar();
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = obter(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.obter(formaPagamentoId);
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = obter(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.obter(formaPagamentoId);
+        restaurante.adicionarFormaPagamento(formaPagamento);
     }
 
     @Transactional

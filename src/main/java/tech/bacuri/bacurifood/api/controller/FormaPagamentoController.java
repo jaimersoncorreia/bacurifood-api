@@ -2,7 +2,7 @@ package tech.bacuri.bacurifood.api.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tech.bacuri.bacurifood.api.assembler.FormaPagamentoAssembler;
+import tech.bacuri.bacurifood.api.assembler.FormaPagamentoModelAssembler;
 import tech.bacuri.bacurifood.api.assembler.FormaPagamentoDisassembler;
 import tech.bacuri.bacurifood.api.model.FormaPagamentoModel;
 import tech.bacuri.bacurifood.api.model.input.FormaPagamentoInput;
@@ -21,26 +21,26 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 public class FormaPagamentoController {
 
     private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
-    private final FormaPagamentoAssembler formaPagamentoAssembler;
+    private final FormaPagamentoModelAssembler formaPagamentoModelAssembler;
     private final FormaPagamentoDisassembler formaPagamentoDisassembler;
 
     @GetMapping
     public List<FormaPagamentoModel> listar() {
         List<FormaPagamento> formasPagamento = cadastroFormaPagamentoService.listar();
-        return formaPagamentoAssembler.toCollectionModel(formasPagamento);
+        return formaPagamentoModelAssembler.toCollectionModel(formasPagamento);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
     public FormaPagamentoModel salvar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento entity = formaPagamentoDisassembler.toEntity(formaPagamentoInput);
-        return formaPagamentoAssembler.toModel(cadastroFormaPagamentoService.salvar(entity));
+        return formaPagamentoModelAssembler.toModel(cadastroFormaPagamentoService.salvar(entity));
 
     }
 
     @GetMapping("/{formaPagamentoId}")
     public FormaPagamentoModel obter(@PathVariable Long formaPagamentoId) {
-        return formaPagamentoAssembler.toModel(cadastroFormaPagamentoService.obter(formaPagamentoId));
+        return formaPagamentoModelAssembler.toModel(cadastroFormaPagamentoService.obter(formaPagamentoId));
     }
 
     @PutMapping("/{formaPagamentoId}")
@@ -48,7 +48,7 @@ public class FormaPagamentoController {
                                          @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamento = cadastroFormaPagamentoService.obter(formaPagamentoId);
         formaPagamentoDisassembler.copyToEntity(formaPagamentoInput, formaPagamento);
-        return formaPagamentoAssembler.toModel(cadastroFormaPagamentoService.atualizar(formaPagamento));
+        return formaPagamentoModelAssembler.toModel(cadastroFormaPagamentoService.atualizar(formaPagamento));
     }
 
     //    excluir
