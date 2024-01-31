@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.lang.Boolean.*;
+import static java.lang.Boolean.TRUE;
 
 @Getter
 @Setter
@@ -74,5 +74,9 @@ public class Restaurante {
 
     public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
         return getFormasPagamento().remove(formaPagamento);
+    }
+
+    public boolean adicionarProduto(Produto produto) {
+        return getProdutos().add(produto);
     }
 }
