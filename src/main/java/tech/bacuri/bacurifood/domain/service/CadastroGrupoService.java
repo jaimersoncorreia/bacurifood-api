@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.exception.GrupoNaoEncontradoException;
 import tech.bacuri.bacurifood.domain.model.Grupo;
+import tech.bacuri.bacurifood.domain.model.Permissao;
 import tech.bacuri.bacurifood.domain.repository.GrupoRepository;
 
 import java.util.List;
@@ -15,8 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class CadastroGrupoService {
-        private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removida, pois está em uso";
+    private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removida, pois está em uso";
     private final GrupoRepository grupoRepository;
+    private final CadastroPermissaoService cadastroPermissaoService;
 
     public List<Grupo> listar() {
         return grupoRepository.findAll();
@@ -44,5 +46,19 @@ public class CadastroGrupoService {
             String msg = String.format(MSG_GRUPO_EM_USO, grupoId);
             throw new EntidadeEmUsoException(msg);
         }
+    }
+
+    @Transactional
+    public void removerPermissao(Long grupoId, Long pemissaoId) {
+        Grupo grupo = obter(grupoId);
+        Permissao permissao = cadastroPermissaoService.obter(pemissaoId);
+        grupo.removerPermissao(permissao);
+    }
+
+    @Transactional
+    public void atribuirPermissao(Long grupoId, Long pemissaoId) {
+        Grupo grupo = obter(grupoId);
+        Permissao permissao = cadastroPermissaoService.obter(pemissaoId);
+        grupo.atribuirPermissao(permissao);
     }
 }

@@ -1,16 +1,9 @@
 package tech.bacuri.bacurifood.domain.repository;
 
+import org.springframework.stereotype.Repository;
 import tech.bacuri.bacurifood.domain.model.Permissao;
 
-import java.util.List;
+@Repository
+public interface PermissaoRepository extends CustomJpaRepository<Permissao, Long> {
 
-public interface PermissaoRepository {
-
-    List<Permissao> todas();
-
-    Permissao obter(Long id);
-
-    Permissao salvar(Permissao permissao);
-
-    void remover(Permissao permissao);
 }

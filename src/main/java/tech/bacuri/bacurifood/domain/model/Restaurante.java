@@ -79,10 +79,6 @@ public class Restaurante {
         return getFormasPagamento().remove(formaPagamento);
     }
 
-    public boolean adicionarProduto(Produto produto) {
-        return getProdutos().add(produto);
-    }
-
     public void fechar() {
         setAberto(FALSE);
     }
