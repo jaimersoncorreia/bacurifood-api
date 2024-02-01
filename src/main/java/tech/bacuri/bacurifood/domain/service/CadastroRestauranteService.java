@@ -71,4 +71,14 @@ public class CadastroRestauranteService {
     public Restaurante atualizar(Restaurante restaurante) {
         return salvar(restaurante);
     }
+
+    @Transactional
+    public void fechar(Long restauranteId) {
+        obter(restauranteId).fechar();
+    }
+
+    @Transactional
+    public void abrir(Long restauranteId) {
+        obter(restauranteId).abrir();
+    }
 }

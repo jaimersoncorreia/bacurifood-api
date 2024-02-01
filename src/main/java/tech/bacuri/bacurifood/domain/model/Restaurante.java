@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 @Getter
@@ -42,6 +43,8 @@ public class Restaurante {
     private Endereco endereco;
 
     private Boolean ativo = TRUE;
+
+    private Boolean aberto = TRUE;
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
@@ -78,5 +81,13 @@ public class Restaurante {
 
     public boolean adicionarProduto(Produto produto) {
         return getProdutos().add(produto);
+    }
+
+    public void fechar() {
+        setAberto(FALSE);
+    }
+
+    public void abrir() {
+        setAberto(TRUE);
     }
 }
