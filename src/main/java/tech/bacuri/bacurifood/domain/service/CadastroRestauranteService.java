@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.RestauranteNaoEncontradoException;
-import tech.bacuri.bacurifood.domain.model.Cidade;
-import tech.bacuri.bacurifood.domain.model.Cozinha;
-import tech.bacuri.bacurifood.domain.model.FormaPagamento;
-import tech.bacuri.bacurifood.domain.model.Restaurante;
+import tech.bacuri.bacurifood.domain.model.*;
 import tech.bacuri.bacurifood.domain.repository.RestauranteRepository;
 
 import java.util.List;
@@ -20,6 +17,7 @@ public class CadastroRestauranteService {
     private final CadastroCozinhaService cadastroCozinha;
     private final CadastroCidadeService cadastroCidade;
     private final CadastroFormaPagamentoService formaPagamentoService;
+    private final CadastroUsuarioService usuarioService;
 
     public List<Restaurante> listar() {
         return restauranteRepository.findAll();
@@ -80,5 +78,19 @@ public class CadastroRestauranteService {
     @Transactional
     public void abrir(Long restauranteId) {
         obter(restauranteId).abrir();
+    }
+
+    @Transactional
+    public void removerResponsavel(Long restauranteId, Long responsavelId) {
+        Restaurante restaurante = obter(restauranteId);
+        Usuario responsavel = usuarioService.obter(responsavelId);
+        restaurante.removerUsuario(responsavel);
+    }
+
+    @Transactional
+    public void atribuirResponsavel(Long restauranteId, Long responsavelId) {
+        Restaurante restaurante = obter(restauranteId);
+        Usuario responsavel = usuarioService.obter(responsavelId);
+        restaurante.atribuirResponsavel(responsavel);
     }
 }

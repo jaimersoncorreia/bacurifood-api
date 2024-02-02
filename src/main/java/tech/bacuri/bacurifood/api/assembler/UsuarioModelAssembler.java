@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import tech.bacuri.bacurifood.api.model.UsuarioModel;
 import tech.bacuri.bacurifood.domain.model.Usuario;
 
+import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class UsuarioModelAssembler {
         return modelMapper.map(usuario, UsuarioModel.class);
     }
 
-    public List<UsuarioModel> toCollectionModel(List<Usuario> usuario) {
+    public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuario) {
         return usuario.stream().map(this::toModel).toList();
     }
 }
