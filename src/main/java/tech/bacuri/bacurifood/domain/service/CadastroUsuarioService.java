@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.bacuri.bacurifood.domain.exception.EntidadeEmUsoException;
 import tech.bacuri.bacurifood.domain.exception.NegocioException;
 import tech.bacuri.bacurifood.domain.exception.UsuarioNaoEncontradoException;
+import tech.bacuri.bacurifood.domain.model.Grupo;
 import tech.bacuri.bacurifood.domain.model.Usuario;
 import tech.bacuri.bacurifood.domain.repository.UsuarioRepository;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class CadastroUsuarioService {
     private static final String MSG_USUARIO_EM_USO = "Usuário de código %d não pode ser removido, pois está em uso";
     private final UsuarioRepository usuarioRepository;
+    private final CadastroGrupoService grupoService;
 
     public List<Usuario> listar() {
         return usuarioRepository.findAll();
@@ -65,5 +67,19 @@ public class CadastroUsuarioService {
             String msg = String.format(MSG_USUARIO_EM_USO, usuarioId);
             throw new EntidadeEmUsoException(msg);
         }
+    }
+
+    @Transactional
+    public void removerGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = obter(usuarioId);
+        Grupo grupo = grupoService.obter(grupoId);
+        usuario.removerGrupo(grupo);
+    }
+
+    @Transactional
+    public void atribuirGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = obter(usuarioId);
+        Grupo grupo = grupoService.obter(grupoId);
+        usuario.atruibuirGrupo(grupo);
     }
 }

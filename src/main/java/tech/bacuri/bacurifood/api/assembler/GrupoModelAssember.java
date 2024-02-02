@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import tech.bacuri.bacurifood.api.model.GrupoModel;
 import tech.bacuri.bacurifood.domain.model.Grupo;
 
+import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class GrupoModelAssember {
         return modelMapper.map(grupo, GrupoModel.class);
     }
 
-    public List<GrupoModel> toCollectionModel(List<Grupo> grupos) {
+    public List<GrupoModel> toCollectionModel(Collection<Grupo> grupos) {
         return grupos.stream().map(this::toModel).toList();
     }
 }
