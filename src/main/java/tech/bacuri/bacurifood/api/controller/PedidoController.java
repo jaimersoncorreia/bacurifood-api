@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.bacuri.bacurifood.api.assembler.PedidoModelAssembler;
+import tech.bacuri.bacurifood.api.assembler.PedidoResumoModelAssembler;
 import tech.bacuri.bacurifood.api.model.PedidoModel;
+import tech.bacuri.bacurifood.api.model.PedidoResumoModel;
 import tech.bacuri.bacurifood.domain.repository.PedidoRepository;
 import tech.bacuri.bacurifood.domain.service.CadastroPedidoService;
 
@@ -20,10 +22,11 @@ public class PedidoController {
     private final CadastroPedidoService pedidoService;
     private final PedidoRepository pedidoRepository;
     private final PedidoModelAssembler pedidoModelAssembler;
+    private final PedidoResumoModelAssembler pedidoResumoModelAssembler;
 
     @GetMapping
-    public List<PedidoModel> listar() {
-        return pedidoModelAssembler.toCollectionModel(pedidoRepository.findAll());
+    public List<PedidoResumoModel> listar() {
+        return pedidoResumoModelAssembler.toCollectionModel(pedidoRepository.findAll());
     }
     @GetMapping("/{pedidoId}")
     public PedidoModel obter(@PathVariable Long pedidoId) {

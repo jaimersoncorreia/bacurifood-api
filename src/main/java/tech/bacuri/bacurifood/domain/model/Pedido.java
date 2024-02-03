@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 import static tech.bacuri.bacurifood.domain.model.StatusPedido.CRIADO;
 
 @Getter
@@ -54,7 +55,7 @@ public class Pedido {
     @Column(columnDefinition = "datetime")
     private OffsetDateTime dataEntrega;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "forma_pagamento_id", nullable = false)
     private FormaPagamento formaPagamento;
 
