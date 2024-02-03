@@ -9,6 +9,9 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.EnumType.STRING;
+import static tech.bacuri.bacurifood.domain.model.StatusPedido.CRIADO;
+
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -31,6 +34,12 @@ public class Pedido {
 
     @Column(nullable = false)
     private BigDecimal valorTotal;
+
+    @Embedded
+    private Endereco enderecoEntrega;
+
+    @Enumerated(STRING)
+    private StatusPedido statusPedido = CRIADO;
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
@@ -59,9 +68,4 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens = new ArrayList<>();
-
-    @Embedded
-    private Endereco enderecoEntrega;
-
-    private StatusPedido statusPedido;
 }

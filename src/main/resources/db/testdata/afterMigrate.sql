@@ -14,6 +14,8 @@ delete from usuario;
 delete from usuario_grupo;
 delete from forma_pagamento;
 delete from restaurante_usuario_responsavel;
+delete from pedido;
+delete from item_pedido;
 
 set foreign_key_checks = 1;
 
@@ -88,3 +90,24 @@ insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 
 insert into bacurifood.usuario_grupo (usuario_id, grupo_id) values (1,1), (1,2), (2,2);
 
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5),(2, 5);
+
+insert into pedido (id, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep,
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+                    status_pedido, data_criacao, subtotal, taxa_frete, valor_total)
+values (1, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+        'CRIADO', utc_timestamp, 298.90, 10, 308.90);
+
+insert into item_pedido (id, pedido_id, produto_id, quantidades, preco_unitario, preco_total, observacao)
+values (1, 1, 1, 1, 78.9, 78.9, null);
+
+insert into item_pedido (id, pedido_id, produto_id, quantidades, preco_unitario, preco_total, observacao)
+values (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');
+
+insert into pedido (id, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep,
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+                    status_pedido, data_criacao, subtotal, taxa_frete, valor_total)
+values (2, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+        'CRIADO', utc_timestamp, 79, 0, 79);
+
+insert into item_pedido (id, pedido_id, produto_id, quantidades, preco_unitario, preco_total, observacao)
+values (3, 2, 6, 1, 79, 79, 'Ao ponto');
