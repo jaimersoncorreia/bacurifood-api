@@ -100,4 +100,12 @@ public class Restaurante {
     public void abrir() {
         setAberto(TRUE);
     }
+
+    public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return !aceitaFormaPagamento(formaPagamento);
+    }
+
+    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return formasPagamento.contains(formaPagamento);
+    }
 }

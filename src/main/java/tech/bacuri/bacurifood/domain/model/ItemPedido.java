@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -20,8 +21,8 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Integer quantidades;
+    @Column(name = "quantidades", nullable = false)
+    private Integer quantidade;
 
     @Column(nullable = false)
     private BigDecimal precoUnitario;
@@ -38,4 +39,17 @@ public class ItemPedido {
     @ManyToOne
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
+
+    public void calcularPrecoTotal() {
+        BigDecimal precoUnitario = getPrecoUnitario();
+        Integer qtde = getQuantidade();
+
+        if (Objects.isNull(precoUnitario))
+            precoUnitario = BigDecimal.ZERO;
+
+        if (Objects.isNull(qtde))
+            qtde = 0;
+
+        this.setPrecoTotal(precoUnitario.multiply(new BigDecimal(qtde)));
+    }
 }
