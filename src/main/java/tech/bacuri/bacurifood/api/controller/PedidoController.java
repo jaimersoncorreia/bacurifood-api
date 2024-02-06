@@ -11,7 +11,7 @@ import tech.bacuri.bacurifood.api.model.input.PedidoInput;
 import tech.bacuri.bacurifood.domain.model.Pedido;
 import tech.bacuri.bacurifood.domain.model.Usuario;
 import tech.bacuri.bacurifood.domain.repository.PedidoRepository;
-import tech.bacuri.bacurifood.domain.service.CadastroPedidoService;
+import tech.bacuri.bacurifood.domain.service.EmissaoPedidoService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    private final CadastroPedidoService pedidoService;
+    private final EmissaoPedidoService pedidoService;
     private final PedidoRepository pedidoRepository;
     private final PedidoModelAssembler pedidoModelAssembler;
     private final PedidoResumoModelAssembler pedidoResumoModelAssembler;

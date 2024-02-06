@@ -10,7 +10,7 @@ import tech.bacuri.bacurifood.domain.repository.PedidoRepository;
 
 @AllArgsConstructor
 @Service
-public class CadastroPedidoService {
+public class EmissaoPedidoService {
     private final PedidoRepository pedidoRepository;
     private final CadastroProdutoService produtoService;
     private final CadastroCidadeService cidadeService;
