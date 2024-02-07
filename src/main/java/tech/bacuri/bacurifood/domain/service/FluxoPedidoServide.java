@@ -11,17 +11,17 @@ public class FluxoPedidoServide {
     private EmissaoPedidoService emissaoPedido;
 
     @Transactional
-    public void confirmar(Long pedidoId) {
-        emissaoPedido.obter(pedidoId).confirmar();
+    public void confirmar(String pedidoCodigo) {
+        emissaoPedido.obter(pedidoCodigo).confirmar();
     }
 
     @Transactional
-    public void entregar(Long pedidoId) {
-        emissaoPedido.obter(pedidoId).entregar();
+    public void entregar(String pedidoCodigo) {
+        emissaoPedido.obter(pedidoCodigo).entregar();
     }
 
     @Transactional
-    public void cancelar(Long pedidoId) {
-        emissaoPedido.obter(pedidoId).cancelar();
+    public void cancelar(String pedidoCodigo) {
+        emissaoPedido.obter(pedidoCodigo).cancelar();
     }
 }

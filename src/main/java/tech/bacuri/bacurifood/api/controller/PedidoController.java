@@ -32,9 +32,9 @@ public class PedidoController {
         return pedidoResumoModelAssembler.toCollectionModel(pedidoRepository.findAll());
     }
 
-    @GetMapping("/{pedidoId}")
-    public PedidoModel obter(@PathVariable Long pedidoId) {
-        return pedidoModelAssembler.toModel(pedidoService.obter(pedidoId));
+    @GetMapping("/{pedidoCodigo}")
+    public PedidoModel obter(@PathVariable String pedidoCodigo) {
+        return pedidoModelAssembler.toModel(pedidoService.obter(pedidoCodigo));
     }
 
     @PostMapping

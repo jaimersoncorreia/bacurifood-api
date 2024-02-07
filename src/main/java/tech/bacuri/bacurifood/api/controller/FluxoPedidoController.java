@@ -8,26 +8,26 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/pedidos/{pedidoId}")
+@RequestMapping("/pedidos/{pedidoCodigo}")
 public class FluxoPedidoController {
 
     private final FluxoPedidoServide fluxoPedido;
 
     @PutMapping("/confirmacao")
     @ResponseStatus(NO_CONTENT)
-    public void confirmar(@PathVariable Long pedidoId) {
-        fluxoPedido.confirmar(pedidoId);
+    public void confirmar(@PathVariable String pedidoCodigo) {
+        fluxoPedido.confirmar(pedidoCodigo);
     }
 
     @PutMapping("/entrega")
     @ResponseStatus(NO_CONTENT)
-    public void entregar(@PathVariable Long pedidoId) {
-        fluxoPedido.entregar(pedidoId);
+    public void entregar(@PathVariable String pedidoCodigo) {
+        fluxoPedido.entregar(pedidoCodigo);
     }
 
     @PutMapping("/cancelamento")
     @ResponseStatus(NO_CONTENT)
-    public void cancelar(@PathVariable Long pedidoId) {
-        fluxoPedido.cancelar(pedidoId);
+    public void cancelar(@PathVariable String pedidoCodigo) {
+        fluxoPedido.cancelar(pedidoCodigo);
     }
 }

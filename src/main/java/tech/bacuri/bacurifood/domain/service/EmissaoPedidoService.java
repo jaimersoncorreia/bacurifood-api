@@ -18,9 +18,9 @@ public class EmissaoPedidoService {
     private final CadastroRestauranteService restauranteService;
     private final CadastroFormaPagamentoService formaPagamentoService;
 
-    public Pedido obter(Long pedidoId) {
-        return pedidoRepository.findById(pedidoId)
-                .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+    public Pedido obter(String pedidoCodigo) {
+        return pedidoRepository.findByCodigo(pedidoCodigo)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoCodigo));
     }
 
     @Transactional
