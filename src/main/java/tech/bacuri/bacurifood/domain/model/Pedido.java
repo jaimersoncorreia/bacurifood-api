@@ -2,6 +2,7 @@ package tech.bacuri.bacurifood.domain.model;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import tech.bacuri.bacurifood.domain.exception.NegocioException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,7 +13,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
-import static tech.bacuri.bacurifood.domain.model.StatusPedido.CRIADO;
+import static tech.bacuri.bacurifood.domain.model.StatusPedido.*;
 
 @Getter
 @Setter
@@ -41,7 +42,8 @@ public class Pedido {
     private Endereco enderecoEntrega;
 
     @Enumerated(STRING)
-    private StatusPedido statusPedido = CRIADO;
+    @Column(name = "status_pedido")
+    private StatusPedido status = CRIADO;
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
@@ -79,5 +81,28 @@ public class Pedido {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         setValorTotal(getSubtotal().add(getTaxaFrete()));
+    }
+
+    public void confirmar() {
+        setStatus(CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    public void entregar() {
+        setStatus(ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelar() {
+        setStatus(CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusPedido novoStatus) {
+        if (this.status.naoPodeAlterarPara(novoStatus)) {
+            String message = "Status do pedido %d não pode ser alterado de %s para %s.";
+            throw new NegocioException(String.format(message, getId(), getStatus().getDescricao(), novoStatus.getDescricao()));
+        }
+        this.status = novoStatus;
     }
 }
