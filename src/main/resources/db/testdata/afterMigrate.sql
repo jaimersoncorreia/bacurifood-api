@@ -16,6 +16,7 @@ delete from forma_pagamento;
 delete from restaurante_usuario_responsavel;
 delete from pedido;
 delete from item_pedido;
+delete from atividade;
 
 set foreign_key_checks = 1;
 
@@ -30,6 +31,7 @@ alter table restaurante auto_increment = 1;
 alter table usuario auto_increment = 1;
 alter table pedido auto_increment = 1;
 alter table item_pedido auto_increment = 1;
+alter table atividade auto_increment = 1;
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -113,3 +115,10 @@ values (2, '41048c97-3596-498a-a83e-0a7ca4c5c83d', 4, 1, 2, 1, '38400-111', 'Rua
 
 insert into item_pedido (id, pedido_id, produto_id, quantidades, preco_unitario, preco_total, observacao)
 values (3, 2, 6, 1, 79, 79, 'Ao ponto');
+
+INSERT INTO bacurifood.atividade (id, nome, descricao, status_atividade, data_inicio, data_fim)
+VALUES (1, 'Teste create atividade a fazer 1', 'Teste create atividade a fazer 1', 'A_FAZER', '2024-05-19', null);
+INSERT INTO bacurifood.atividade (id, nome, descricao, status_atividade, data_inicio, data_fim)
+VALUES (2, 'Teste create atividade fazendo 2', 'Teste create atividade fazendo 2', 'FAZENDO', '2024-05-20', null);
+INSERT INTO bacurifood.atividade (id, nome, descricao, status_atividade, data_inicio, data_fim)
+VALUES (3, 'Teste create atividade feito 3', 'Teste create atividade feito 3', 'FEITO', '2024-05-20', '2024-05-20');
